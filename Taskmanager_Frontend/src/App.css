@@ -1,0 +1,126 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Optimisations des transitions et animations */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-fadeIn {
+    animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .animate-slideIn {
+    animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .animate-slideInMobile {
+    animation: slideInMobile 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .hover-lift {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Animations principales */
+@keyframes fadeIn {
+  from { 
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from { 
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInMobile {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Optimisations mobiles */
+@media (max-width: 768px) {
+  .mobile-transition {
+    transition-duration: 200ms !important;
+  }
+  
+  .mobile-menu-enter {
+    animation: slideInMobile 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* Support Réduction de mouvement */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Classes pour le mode sombre */
+.dark-transition {
+  @apply transition-colors duration-300;
+}
+
+.dark-text-high {
+  @apply text-gray-900 dark:text-gray-100;
+}
+
+.dark-text-medium {
+  @apply text-gray-700 dark:text-gray-300;
+}
+
+.dark-text-low {
+  @apply text-gray-600 dark:text-gray-400;
+}
+
+/* Animation avec performance optimisée */
+.performance-animation {
+  @apply transform will-change-transform;
+  backface-visibility: hidden;
+}
+/* Classes utilitaires */
+.backdrop-blur {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-scale {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}

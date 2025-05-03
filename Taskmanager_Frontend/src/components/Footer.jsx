@@ -1,0 +1,42 @@
+// components/Footer.jsx
+const Footer = () => {
+  return (
+    <footer className="w-full bg-white/20 dark:bg-gray-800/30 backdrop-blur-md border-t border-white/20 mt-auto">
+      <div className="container mx-auto px-4 py-6">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          {/* Copyright */}
+          <div className="text-sm text-gray-600 dark:text-gray-300">
+            © {new Date().getFullYear()} TaskManager. Tous droits réservés.
+          </div>
+
+          {/* Navigation */}
+          <nav className="flex items-center gap-6">
+            <a 
+              href="#" 
+              className="text-sm text-gray-600 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400 transition-colors duration-300"
+              aria-label="Twitter"
+            >
+              Twitter
+            </a>
+            <a 
+              href="#" 
+              className="text-sm text-gray-600 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400 transition-colors duration-300"
+              aria-label="LinkedIn"
+            >
+              LinkedIn
+            </a>
+            <a 
+              href="#" 
+              className="text-sm text-gray-600 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400 transition-colors duration-300"
+              aria-label="GitHub"
+            >
+              GitHub
+            </a>
+          </nav>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
