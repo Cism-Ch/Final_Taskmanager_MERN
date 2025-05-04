@@ -37,7 +37,7 @@ Le serveur utilise Express.js avec les configurations suivantes :
 
 ## API Endpoints
 
-### Authentication (/api/v1/auth)
+### Authentication (/auth)
 | Méthode | Endpoint | Description | Authentification |
 |---------|----------|-------------|-----------------|
 | POST | /login | Connexion utilisateur | Non |
@@ -48,7 +48,7 @@ Le serveur utilise Express.js avec les configurations suivantes :
 | PUT | /users/update-profile | Mettre à jour le profil | Oui |
 | PUT | /users/update-avatar | Mettre à jour l'avatar | Oui |
 
-### Tâches (/api/v1/tasks)
+### Tâches (/tasks)
 | Méthode | Endpoint | Description | Authentification |
 |---------|----------|-------------|-----------------|
 | POST | /create | Créer une tâche | Oui |

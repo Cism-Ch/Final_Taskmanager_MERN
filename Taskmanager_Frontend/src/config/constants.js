@@ -3,7 +3,7 @@ const BASE_URL = import.meta.env.VITE_API_URL?.replace('/api/v1', '') || 'http:/
 import mypic from '../assets/images/defaultProfile.svg'
 
 // URL de l'API
-export const API_URL = `${BASE_URL}/api/v1`;
+export const API_URL = `${BASE_URL}`;
 
 // URL des médias, directement à la racine car servis comme fichiers statiques
 export const MEDIA_URL = BASE_URL;
