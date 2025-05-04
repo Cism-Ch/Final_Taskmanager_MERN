@@ -136,6 +136,15 @@ app.use('/api/v1/tasks', taskRouter);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 
+//
+app.get('/', (req, res) => {
+  res.status(200).json({ 
+    message: 'Taskmanager API is running',
+    status: 'ok',
+    version: '1.0.0' 
+  });
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
