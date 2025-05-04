@@ -6,7 +6,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           {/* Copyright */}
           <div className="text-sm text-gray-600 dark:text-gray-300">
-            © {new Date().getFullYear()} TaskManager. Tous droits réservés.
+            © {new Date().getFullYear()} Tosky Task Manager. Tous droits réservés. by Cism-Ch
           </div>
 
           {/* Navigation */}

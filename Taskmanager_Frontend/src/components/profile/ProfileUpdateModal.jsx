@@ -350,7 +350,7 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center mx-80 my-20">
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center md:mx-3/4 lg:mx-80 my-3/5">
       <div className="fixed inset-0 bg-black/70 backdrop-blur-lg transition-opacity duration-300"
         onClick={(e) => {
           e.stopPropagation(); // Empêcher la propagation au parent
@@ -371,6 +371,7 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
         <h3 className="mb-4 text-xl font-medium text-gray-700 dark:text-gray-100">
           Modifier le profil
         </h3>
+        <p className='text-orange-300/70 mb-8'>Déconnecter vous et réconnecter vous pour actualiser les modifications</p>
 
         {/* Message d'erreur général */}
         {(updateError || errors.submit) && (
@@ -709,6 +710,7 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
                 'Sauvegarder'
               )}
             </button>
+            
           </div>
         </form>
       </div>

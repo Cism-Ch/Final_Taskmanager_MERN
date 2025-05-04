@@ -53,7 +53,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="backdrop-filter backdrop-blur-md bg-white/20 dark:bg-gray-800/30 rounded-xl shadow-lg border border-white/20 p-4 lg:p-3 xl:p-4 transition-all duration-300 hover:shadow-xl  motion-safe:hover:scale-[1.02] z-10 relative mt-16 mx-2 md:mb-4 lg:mx-4">
+    <div className="backdrop-filter backdrop-blur-md bg-white/20 dark:bg-gray-800/30 rounded-xl shadow-lg border border-white/20 p-4 lg:p-3 xl:p-4 transition-all duration-300 hover:shadow-xl  motion-safe:hover:scale-[1.02] z-10 relative  mx-2 my-16 md:mb-4 lg:mx-4">
       <div className="flex flex-col space-y-6 lg:space-y-5 xl:space-y-6">
         {/* Profile Section */}
         <div className="flex flex-col items-center sm:p-2">
@@ -71,7 +71,7 @@ const Sidebar = () => {
         {/* Stats Section */}
         <div className="bg-white/30 dark:bg-gray-700/30 p-3 lg:p-2.5 xl:p-3 rounded-lg hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all">
           <h3 className="font-medium text-gray-700 dark:text-gray-200 mb-2">Statistiques</h3>
-          <div className="grid grid-cols-1 lg:grid-cols-1 xl:grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 lg:grid-cols-1 xl:grid-cols-3 gap-2">
             <div className="bg-blue-500/20 p-3 lg:p-2.5 xl:p-3 rounded-md flex-1 hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all">
               <p className="text-sm text-gray-600 dark:text-gray-300">Total</p>
               <p className="font-bold text-gray-800 dark:text-white">{totalTasks}</p>
@@ -88,9 +88,9 @@ const Sidebar = () => {
         </div>
         
         {/* Section Catégories */}
-        <div className="bg-white/30 dark:bg-gray-700/30 p-3 rounded-lg hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all">
+        <div className="bg-white/30 dark:bg-gray-700/30 p-3 rounded-lg hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all ">
           <h3 className="font-medium text-gray-700 dark:text-gray-200 mb-2">Catégories</h3>
-          <ul className="space-y-1">
+          <ul className="space-y-1 grid grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 gap-2">
             <li 
               onClick={() => dispatch(setCurrentCategory('All'))}
               className={`flex items-center justify-between p-2 rounded-md cursor-pointer transition-colors ${
