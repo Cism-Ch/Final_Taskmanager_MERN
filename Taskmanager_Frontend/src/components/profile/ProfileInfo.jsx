@@ -144,7 +144,7 @@ const ProfileInfo = () => {
       {/* Vertical Card Stack */}
       <div className="flex flex-col space-y-5">
         {/* Card 1: Informations personnelles */}
-        <div className="bg-white/10 dark:bg-gray-900/80 backdrop-blur-md rounded-xl p-4 sm:p-5 border border-gray-200/60 dark:border-slate-500/30 shadow-md hover:shadow-lg transition-all duration-300 w-full">
+        <div className="bg-white/10 dark:bg-gray-900/80 backdrop-blur-md rounded-xl p-4 sm:p-5 border border-gray-200/60 dark:border-slate-500/30 shadow-md transition-all duration-300 w-full hover:shadow-xl motion-safe:hover:scale-[1.02]">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 pb-2 border-b border-gray-200/60 dark:border-gray-100/40 flex items-center gap-2">
             <span className="inline-block w-1.5 h-6 bg-blue-500 rounded-full mr-1.5"></span>
             Informations personnelles
@@ -169,7 +169,7 @@ const ProfileInfo = () => {
         </div>
 
         {/* Card 2: Informations détaillées */}
-        <div className="bg-white/10 dark:bg-gray-900/80 backdrop-blur-md rounded-xl p-4 sm:p-5 border border-gray-200/60 dark:border-slate-500/30 shadow-md hover:shadow-lg transition-all duration-300 w-full">
+        <div className="bg-white/10 dark:bg-gray-900/80 backdrop-blur-md rounded-xl p-4 sm:p-5 border border-gray-200/60 dark:border-slate-500/30 shadow-md hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all duration-300 w-full">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 pb-2 border-b border-gray-200/60 dark:border-gray-200/40 flex items-center gap-2">
             <span className="inline-block w-1.5 h-6 bg-blue-500 rounded-full mr-1.5"></span>
             Informations détaillées
@@ -194,7 +194,7 @@ const ProfileInfo = () => {
         </div>
 
         {/* Card 3: Réseaux sociaux */}
-        <div className="bg-white/10 dark:bg-gray-900/20 backdrop-blur-md rounded-xl p-4 sm:p-5 border border-gray-200/60 dark:border-slate-200/30 shadow-md hover:shadow-lg transition-all duration-300 w-full">
+        <div className="bg-white/10 dark:bg-gray-900/20 backdrop-blur-md rounded-xl p-4 sm:p-5 border border-gray-200/60 dark:border-slate-200/30 shadow-md hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all duration-300 w-full">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 pb-2 border-b border-gray-200/60 dark:border-gray-700/40 flex items-center gap-2">
             <span className="inline-block w-1.5 h-6 bg-blue-500 rounded-full mr-1.5"></span>
             Mes réseaux sociaux

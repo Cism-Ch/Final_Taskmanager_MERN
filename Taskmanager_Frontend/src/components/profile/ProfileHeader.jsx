@@ -19,8 +19,8 @@ const ProfileHeader = ({ size = 'large', showActions = true }) => {
 
   return (
     <div className={`m-12 p-6 rounded-xl  overflow-auto max-h-80`}>
-      <div className={`flex items-center bg-white/5 dark:bg-gray-900/80 rounded-2xl shadow-lg ${size === 'large' ? 'gap-6 p-6' : 'gap-4 p-4'} transition-all duration-300`}>
-      <div className={`relative ${size === 'large' ? 'w-24 h-24' : 'w-16 h-16'} md:mb-2` }>
+      <div className={`flex items-center bg-white/5 dark:bg-gray-900/80 rounded-2xl shadow-lg ${size === 'large' ? 'gap-6 p-6' : 'gap-4 p-4'} transition-all duration-300 hover:shadow-xl motion-safe:hover:scale-[1.02]`}>
+      <div className={`relative ${size === 'large' ? 'w-24 h-24' : 'w-16 h-16'} md:mb-2  motion-safe:hover:scale-[1.02] transition-all` }>
         <img
           src={PROFILE_IMAGES.DEFAULT}
           alt={`Avatar de ${userProfile?.username || 'Utilisateur'}`}
@@ -32,7 +32,7 @@ const ProfileHeader = ({ size = 'large', showActions = true }) => {
         />
       </div>
       
-      <div className="flex flex-col">
+      <div className="flex flex-col motion-safe:hover:scale-[1.02] transition-all">
         <h2 className={`font-bold text-gray-700 dark:text-gray-200 ${
           size === 'large' ? 'text-2xl' : 'text-base'
         } truncate max-w-[150px] transition-all duration-300`}>
@@ -44,7 +44,7 @@ const ProfileHeader = ({ size = 'large', showActions = true }) => {
       </div>
 
       {showActions && (
-        <div className="ml-auto flex gap-2">
+        <div className="ml-auto flex gap-2 motion-safe:hover:scale-[1.02] transition-all">
           <button
             className="px-4 py-2 text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 bg-white/20 dark:bg-gray-100/30 rounded-lg hover:bg-white/30 dark:hover:bg-gray-400/40 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-primary-500"
             aria-label="Modifier le profil"

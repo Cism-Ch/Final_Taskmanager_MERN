@@ -71,7 +71,7 @@ const TodoFilter = () => {
   }
 
   // Ne rendre le composant que si l'authentification est vérifiée et valide
-  if (!user?._id) return null;
+  // if (!user?._id) return null;
 
   return (
     <>
@@ -107,19 +107,25 @@ const TodoFilter = () => {
       >
         <div className="backdrop-filter backdrop-blur-md bg-white/20 dark:bg-gray-800/30 rounded-xl shadow-lg border border-white/20 p-4 transition-all duration-300 hover:shadow-xl z-10 relative mt-16 mx-2 lg:mx-auto motion-safe:hover:scale-[1.02]">
           <div className="space-y-20">
-            <MainFilters
+            
+            <div className="bg-white/30 dark:bg-gray-700/40 p-3 rounded-lg hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all">
+              <MainFilters
               currentFilter={currentFilter}
               onFilterChange={handleFilterChange}
               isLoading={isLoading}
             />
+            </div>
+
+            <div className="bg-white/30 dark:bg-gray-700/40 p-3 rounded-lg hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all">
             
             <DateRangeFilter
               dateRange={dateRange}
               onDateChange={handleDateChange}
               isLoading={isLoading}
             />
+            </div>
 
-            <div className="bg-white/30 dark:bg-gray-700/30 p-3 rounded-lg">
+            <div className="bg-white/30 dark:bg-gray-700/40 p-3 rounded-lg hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all">
               <h3 className="font-medium text-gray-700 dark:text-gray-200 mb-2">Trier par</h3>
               <SortingOptions
                 currentSortType={currentSortType}

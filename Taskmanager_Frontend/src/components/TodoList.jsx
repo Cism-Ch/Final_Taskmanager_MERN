@@ -61,7 +61,7 @@ const TodoList = ({ tasks = [] }) => {
   }
 
   return (
-    <div className="m-12 p-6 rounded-xl bg-white dark:bg-black/50 overflow-auto max-h-screen">
+    <div className="m-12 p-6 rounded-xl bg-white dark:bg-black/50 overflow-auto max-h-screen motion-safe:hover:scale-[1.02] transition-all duration-400 hover:shadow-xl">
       {sortedTasks.length === 0 ? (
         <div className="flex justify-center items-center h-full" role="status">
           <span className="text-gray-900 dark:text-gray-100" aria-label="Aucune tâche">

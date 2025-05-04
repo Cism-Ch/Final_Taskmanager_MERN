@@ -51,7 +51,7 @@ const TodoCreate = () => {
   return (
     <div className="mt-8 mb-8">
       <form onSubmit={handleSubmit}
-        className="backdrop-filter backdrop-blur-lg bg-white/25 dark:bg-gray-800/25 border border-gray-300/80 rounded-xl shadow-lg hover:shadow-xl motion-safe:transition-all motion-reduce:transition-none duration-300 p-6">
+        className="backdrop-filter backdrop-blur-lg bg-white/25 dark:bg-gray-800/25 border border-gray-300/80 rounded-xl shadow-lg hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all motion-reduce:transition-none duration-300 p-6">
         <div className="space-y-4">
           {/* Titre */}
           <div>
@@ -65,7 +65,7 @@ const TodoCreate = () => {
                 focus-visible:ring-2 focus-visible:ring-blue-500 dark:focus-visible:ring-blue-400
                 bg-white dark:bg-gray-900/80 text-gray-900 dark:text-white
                 placeholder:text-gray-400 dark:placeholder:text-gray-300
-                motion-safe:transition-all motion-reduce:transition-none duration-300"
+                hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all motion-reduce:transition-none duration-300"
               required
             />
           </div>
@@ -82,7 +82,7 @@ const TodoCreate = () => {
                 focus-visible:ring-2 focus-visible:ring-blue-500 dark:focus-visible:ring-blue-400
                 bg-white dark:bg-gray-900/80 text-gray-900 dark:text-white
                 placeholder:text-gray-400 dark:placeholder:text-gray-300
-                motion-safe:transition-all motion-reduce:transition-none duration-300"
+                hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all motion-reduce:transition-none duration-300"
             />
           </div>
 
@@ -124,7 +124,7 @@ const TodoCreate = () => {
             className="w-full px-4 py-2 bg-orange-500 hover:bg-purple-400 
               text-white font-semibold rounded-lg shadow-md
               transition-all duration-300 ease-in-out
-              disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-xl motion-safe:hover:scale-[1.02]"
             disabled={!formData.title.trim()}
           >
             Créer la tâche

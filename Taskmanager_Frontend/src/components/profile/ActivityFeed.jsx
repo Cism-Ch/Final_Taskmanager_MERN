@@ -52,8 +52,8 @@ const ActivityItem = memo(({ type, title, date, status }) => {
   };
 
   return (
-    <div className="flex items-start gap-4 p-4 bg-white/20 dark:bg-gray-800/30 rounded-2xl transition-all duration-300 hover:bg-white/30 dark:hover:bg-gray-800/40">
-      <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-white/30 dark:bg-gray-700/50">
+    <div className="flex items-start gap-4 p-4 bg-white/20 dark:bg-gray-800/30 rounded-2xl transition-all duration-300 hover:bg-white/30 dark:hover:bg-gray-800/40 ">
+      <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-white/30 dark:bg-gray-700/50 hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all">
         {getIcon()}
       </div>
       <div className="flex-grow min-w-0">

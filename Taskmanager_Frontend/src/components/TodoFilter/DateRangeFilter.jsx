@@ -21,7 +21,7 @@ const DateRangeFilter = memo(({
   };
 
   return (
-    <div className="bg-white/30 dark:bg-gray-700/30 p-3 rounded-lg">
+    <div className="bg-white/30 dark:bg-gray-700/0 p-3 rounded-lg">
       <h3 className="font-medium text-gray-700 dark:text-gray-200 mb-2">
         Filtrer par date
       </h3>

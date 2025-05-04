@@ -6,7 +6,7 @@ import { FaClipboardList, FaHourglass, FaTrash, FaStar, FaCheckCircle } from 're
 
 const StatCard = ({ title, value, icon, description }) => (
   <div
-    className="flex items-center w-full bg-white/50 dark:bg-gray-900/40 rounded-full shadow-lg py-3 px-4 hover:bg-white/10 dark:hover:bg-gray-900/50 transition-all duration-300 backdrop-blur-sm"
+    className="flex items-center w-full bg-white/50 dark:bg-gray-900/40 rounded-full shadow-lg py-3 px-4 hover:bg-white/10 dark:hover:bg-gray-900/50 transition-all duration-300 backdrop-blur-sm hover:shadow-xl motion-safe:hover:scale-[1.02]"
     role="article"
     aria-label={`Statistique: ${title}`}
   >

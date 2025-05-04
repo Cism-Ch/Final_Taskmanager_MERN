@@ -1,9 +1,57 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Header, TodoComputed, TodoCreate, TodoFilter, TodoList, Sidebar, Footer } from '../components';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAllTasks, getFilter, getOwnerTasks } from '../redux/slices/taskSlice';
 import { selectUser } from '../redux/slices/authSlice';
-import { useEffect } from 'react';
+
+// Variants d'animation
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      when: "beforeChildren",
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const headerVariants = {
+  hidden: { y: -20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: { duration: 0.5, ease: "easeOut" }
+  }
+};
+
+const todoCreateVariants = {
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.4, ease: "easeOut" }
+  }
+};
+
+const sidebarVariants = {
+  hidden: { x: -50, opacity: 0 },
+  visible: {
+    x: 0,
+    opacity: 1,
+    transition: { duration: 0.5, ease: "easeOut" }
+  }
+};
+
+const filterVariants = {
+  hidden: { x: 50, opacity: 0 },
+  visible: {
+    x: 0,
+    opacity: 1,
+    transition: { duration: 0.5, ease: "easeOut" }
+  }
+};
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -12,6 +60,7 @@ const Home = () => {
   const filter = useSelector(getFilter);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
   
   const itemsLeft = tasks.filter((task) => task.status === 'pending').length;
 
@@ -81,22 +130,41 @@ const Home = () => {
         )}
 
         {/* Sidebar - Mobile order: 2 */}
-        <aside className={`fixed inset-y-0 left-0 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:row-start-1 lg:col-start-1 lg:translate-x-0 transition-all duration-300 ease-out bg-gradient-to-r via-black/10 from-black/60 to-transparent z-40 w-72 lg:w-auto overflow-y-auto`}>
+        <motion.aside
+          variants={sidebarVariants}
+          initial={shouldReduceMotion ? "visible" : "hidden"}
+          animate="visible"
+          className={`fixed inset-y-0 left-0 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:row-start-1 lg:col-start-1 lg:translate-x-0 transition-all duration-300 ease-out bg-gradient-to-r via-black/10 from-black/60 to-transparent z-40 w-72 lg:w-auto overflow-y-auto`}
+        >
           <Sidebar />
-        </aside>
+        </motion.aside>
 
         {/* Main Content - Mobile order: 1 */}
-        <main className="relative row-start-1 lg:col-start-2 p-4 space-y-4 overflow-y-auto min-h-[calc(100vh-4rem)]">
-          <Header />
-          <TodoCreate />
+        <motion.main
+          variants={containerVariants}
+          initial={shouldReduceMotion ? "visible" : "hidden"}
+          animate="visible"
+          className="relative row-start-1 lg:col-start-2 p-4 space-y-4 overflow-y-auto min-h-[calc(100vh-4rem)]"
+        >
+          <motion.div variants={headerVariants}>
+            <Header />
+          </motion.div>
+          <motion.div variants={todoCreateVariants}>
+            <TodoCreate />
+          </motion.div>
           <TodoList tasks={filteredTasks()} />
           {itemsLeft > 0 && <TodoComputed itemsLeft={itemsLeft} />}
-        </main>
+        </motion.main>
 
         {/* TodoFilter - Mobile order: 3 */}
-        <aside className={`fixed inset-y-0 right-0 transform ${filterOpen ? 'translate-x-0' : 'translate-x-full'} lg:relative lg:row-start-1 lg:col-start-3 lg:translate-x-0 transition-all duration-300 ease-out bg-gradient-to-l via-black/10 from-black/60 to-transparent z-40 w-72 lg:w-auto overflow-y-auto`}>
+        <motion.aside
+          variants={filterVariants}
+          initial={shouldReduceMotion ? "visible" : "hidden"}
+          animate="visible"
+          className={`fixed inset-y-0 right-0 transform ${filterOpen ? 'translate-x-0' : 'translate-x-full'} lg:relative lg:row-start-1 lg:col-start-3 lg:translate-x-0 transition-all duration-300 ease-out bg-gradient-to-l via-black/10 from-black/60 to-transparent z-40 w-72 lg:w-auto overflow-y-auto`}
+        >
           <TodoFilter />
-        </aside>
+        </motion.aside>
 
         {/* Footer - Mobile order: 4 */}
         <footer className="row-start-2 col-span-full bg-white/10 dark:bg-gray-800/10 backdrop-blur-lg mt-auto">

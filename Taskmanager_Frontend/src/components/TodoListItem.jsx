@@ -117,7 +117,7 @@ const TodoListItem = memo(({ todo, ...props }) => {
   return (
     <article
       {...props}
-      className={`flex flex-col gap-2 border-b border-gray-200 p-4 dark:border-slate-500 transition-all duration-300 ${
+      className={`flex flex-col gap-2 border-b border-gray-200 p-4 dark:border-slate-500 motion-safe:hover:scale-[1.05] transition-all duration-300 ${
         isImportant ? 'bg-amber-50/50 dark:bg-amber-900/20' : ''
       }`}
       role="listitem"
@@ -179,7 +179,7 @@ const TodoListItem = memo(({ todo, ...props }) => {
             <button
               onClick={handleDelete}
               disabled={taskLoadingStatus === 'loading'}
-              className="mt-1 text-gray-400 hover:text-red-500 transition-colors"
+              className="mt-1 text-red-200 hover:text-red-600 transition-colors"
               aria-label="Supprimer la tâche"
             >
               <IconCross />

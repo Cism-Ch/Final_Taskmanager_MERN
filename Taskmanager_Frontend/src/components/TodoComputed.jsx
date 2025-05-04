@@ -21,12 +21,12 @@ const TodoComputed = ({ itemsLeft }) => {
   }, [dispatch, completed_ids]);
 
   return (
-    <section className="flex flex-col sm:flex-row justify-between items-center gap-4 backdrop-filter backdrop-blur-md bg-white/20 dark:bg-gray-800/30 border border-white/20 rounded-xl shadow-lg hover:shadow-xl p-4 mt-8 text-sm transition-all duration-300 mx-2 sm:mx-4 lg:mx-6">
+    <section className="flex flex-col sm:flex-row justify-between items-center gap-4 backdrop-filter backdrop-blur-md bg-white/20 dark:bg-gray-800/30 border border-white/20 rounded-xl shadow-lg  p-4 my-8 text-sm hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all mx-2 sm:mx-4 lg:mx-6">
       <span className="text-gray-600 dark:text-gray-200 font-medium transition-all duration-300">
-        {itemsLeft} {itemsLeft > 1 ? 'tasks' : 'task'} pending
+        {itemsLeft} {itemsLeft > 1 ? 'tasks' : 'task'} Pending
       </span>
       <button onClick={clearCompletedTodos}
-        className="text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 font-medium transition-all duration-300">
+        className="text-red-500 hover:text-red-600 dark:text-orange-400 dark:hover:text-red-500 font-medium transition-all duration-300">
         Clear Completed Task
       </button>
     </section>

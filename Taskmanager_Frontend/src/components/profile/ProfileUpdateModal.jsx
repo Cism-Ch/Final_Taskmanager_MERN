@@ -350,15 +350,15 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center mx-auto">
-      <div className="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300"
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center mx-80 my-20">
+      <div className="fixed inset-0 bg-black/70 backdrop-blur-lg transition-opacity duration-300"
         onClick={(e) => {
           e.stopPropagation(); // Empêcher la propagation au parent
           onClose();
         }}
         aria-hidden="true"
       />
-      <div className="relative w-full h-full bg-white/60 dark:bg-black/10 backdrop-blur-md  overflow-y-auto mx-auto transform overflow-hidden p-6 sm:p-6 md:p-8 shadow-xl border border-gray-200/50 dark:border-slate-500/50 transition-all duration-300">
+      <div className="relative w-full h-full bg-white/60 dark:bg-black/10 backdrop-blur-md  overflow-y-auto mx-auto transform overflow-hidden p-6 sm:p-6 md:p-20 shadow-xl border border-gray-200/40 dark:border-slate-500/50 transition-all duration-300 rounded-2xl">
         {/* Bouton fermer */}
         <button
           onClick={handleClose}
