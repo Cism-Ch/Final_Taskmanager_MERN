@@ -132,9 +132,9 @@ app.use('/uploads', (req, res, next) => {
 
 app.use(express.static(publicPath));
 
-app.use('/api/v1/tasks', taskRouter);
-app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/users', userRouter);
+app.use('/tasks', taskRouter);
+app.use('/auth', authRouter);
+app.use('/users', userRouter);
 
 //
 app.get('/', (req, res) => {
