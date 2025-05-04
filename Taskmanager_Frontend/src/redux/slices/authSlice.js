@@ -76,10 +76,19 @@ export const logout = createAsyncThunk('auth/logout', async () => {
     return null;
 });
 
-export const register = createAsyncThunk('auth/register', async (payload) => {
-    const { data } = await axios.post(`${API_URL}/auth/register`, payload);
-    return data;
-});
+export const register = createAsyncThunk('auth/register',
+    async (payload, { rejectWithValue }) => {
+        try {
+            const response = await axios.post(`${API_URL}/auth/register`, payload);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(
+                error.response?.data?.message ||
+                'Erreur lors de l\'inscription'
+            );
+        }
+    }
+);
 
 export const activation = createAsyncThunk(
     'auth/activation',
@@ -409,7 +418,10 @@ const authSlice = createSlice({
         })
         .addCase(register.rejected, (state, action) => {
             state.status = 'failed';
-            state.message = action.error.message;
+            state.message = action.payload || action.error.message;
+            if (state.message === 'Rejected') {
+                state.message = 'Erreur lors de l\'inscription. Veuillez réessayer.';
+            }
         })
         .addCase(activation.pending, (state) => {
             state.status = 'loading';

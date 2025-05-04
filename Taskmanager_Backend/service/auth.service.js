@@ -122,11 +122,18 @@ const Joi = require('joi');
 const statsCache = new NodeCache({ stdTTL: 300 });
 const emailVerificationCache = new NodeCache({ stdTTL: 3600 }); // Cache pour les tentatives de vérification d'email
 
-const MAX_VERIFICATION_ATTEMPTS = 3;
+const MAX_VERIFICATION_ATTEMPTS = 6;
 const EMAIL_TOKEN_EXPIRY = '1h';
 
 const register = async (userData) => {
     try {
+        // Log des données reçues pour le debug
+        console.log('Register - Données reçues:', {
+            ...userData,
+            password: '***HIDDEN***',
+            cpassword: '***HIDDEN***'
+        });
+
         // Validation du schéma avec Joi
         const schema = Joi.object({
             name: Joi.string()
@@ -153,6 +160,13 @@ const register = async (userData) => {
                     'string.min': 'Le mot de passe doit contenir au moins {#limit} caractères',
                     'string.pattern.base': 'Le mot de passe doit contenir au moins une majuscule, une minuscule et un chiffre',
                     'any.required': 'Le mot de passe est requis'
+                }),
+            cpassword: Joi.string()
+                .required()
+                .valid(Joi.ref('password'))
+                .messages({
+                    'any.only': 'Les mots de passe ne correspondent pas',
+                    'any.required': 'La confirmation du mot de passe est requise'
                 })
         });
 
@@ -188,12 +202,41 @@ const register = async (userData) => {
             };
         }
 
-        // Créer l'utilisateur temporaire
-        const user = await TmpUserRepo.createTmpUser(userData);
+        // On s'assure que toutes les données nécessaires sont présentes avant la création
+        const tmpUserData = {
+            name: userData.name,
+            email: userData.email,
+            password: userData.password,
+            cpassword: userData.cpassword
+        };
 
-        // Générer le lien d'activation
-        const link = `${process.env.CLIENT_URL}/#${process.env.ACTIVATION_PATH}?token=${user.token}&id=${user._id}`;
+        console.log('Register - Création utilisateur temporaire:', {
+            name: tmpUserData.name,
+            email: tmpUserData.email,
+            hasPassword: !!tmpUserData.password,
+            hasCPassword: !!tmpUserData.cpassword,
+            timestamp: new Date().toISOString()
+        });
+
+        // Créer l'utilisateur temporaire
+        const user = await TmpUserRepo.createTmpUser(tmpUserData);
+
+        if (!user) {
+            throw new Error('Échec de la création de l\'utilisateur temporaire');
+        }
+
+        // Générer le lien d'activation avec token encodé
+        const encodedToken = encodeURIComponent(user.token);
+        const link = `${process.env.CLIENT_URL}/#${process.env.ACTIVATION_PATH}/${user._id}/${encodedToken}`;
         const payload = { name: user.name, link };
+
+        console.log("Lien d'activation généré :", {
+            link,
+            userId: user._id,
+            tokenLength: user.token.length,
+            encodedTokenLength: encodedToken.length,
+            timestamp: new Date().toISOString()
+        });
         
         // Envoyer l'email de vérification
         await sendEmail(
@@ -221,9 +264,22 @@ const register = async (userData) => {
 
 const Activate = async (payload) => {
     const { token, userId } = payload;
-    console.log('Activation - Début du processus:', { userId, token });
+    console.log('Activation - Début du processus:', {
+        userId,
+        token,
+        timestamp: new Date().toISOString()
+    });
 
     try {
+        // Décoder le token
+        const decodedToken = decodeURIComponent(token);
+        console.log('Token décodé:', {
+            originalLength: token.length,
+            decodedLength: decodedToken.length,
+            timestamp: new Date().toISOString()
+        });
+
+        console.log('Activation - Validation des paramètres');
         // Vérification des paramètres
         if (!token || !userId) {
             console.warn('Activation - Paramètres manquants:', { token, userId });
@@ -331,8 +387,7 @@ const Activate = async (payload) => {
             }
         });
 
-        // Créer l'utilisateur permanent
-        // Tentative de création de l'utilisateur avec gestion des erreurs détaillée
+        // Créer l'utilisateur permanent avec plus de détails de logging
         console.log('Activation - Tentative de création utilisateur:', {
             email: userData.email,
             username: userData.username,
@@ -341,12 +396,25 @@ const Activate = async (payload) => {
 
         let newUser;
         try {
+            // Mise à jour de l'utilisateur temporaire comme actif
+            tmpUser.active = true;
+            await tmpUser.save();
+            console.log('Activation - Utilisateur temporaire marqué comme actif');
+
             newUser = await UserRepo.createUser(userData);
             
             if (!newUser) {
                 console.error('Activation - Échec création utilisateur: résultat null');
                 throw new Error("Échec de la création de l'utilisateur permanent");
             }
+
+            console.log('Activation - Utilisateur permanent créé avec succès:', {
+                userId: newUser._id,
+                email: newUser.email,
+                active: newUser.is_active,
+                created: newUser.createdAt,
+                timestamp: new Date().toISOString()
+            });
 
             console.log('Activation - Utilisateur créé avec succès:', {
                 id: newUser._id,

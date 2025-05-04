@@ -22,6 +22,7 @@ const tmpUserSchema = new Schema({
     token: { type: String },
 
     password: { type: String, required: true, minlength: 8, trim: true },
+    cpassword: { type: String, required: true, trim: true },
 
     createdAt: {
         type: Date,
@@ -32,13 +33,40 @@ const tmpUserSchema = new Schema({
 
 })
 
+// Valider que cpassword correspond à password
+tmpUserSchema.pre('validate', function(next) {
+    if (this.isModified('password') || this.isModified('cpassword')) {
+        if (this.password !== this.cpassword) {
+            this.invalidate('cpassword', 'Les mots de passe ne correspondent pas');
+            return next(new Error('Les mots de passe ne correspondent pas'));
+        }
+    }
+    next();
+});
+
+// Valider que cpassword correspond à password avant la validation
+tmpUserSchema.pre('validate', function(next) {
+    if (this.isModified('password') || this.isModified('cpassword')) {
+        if (this.password !== this.cpassword) {
+            this.invalidate('cpassword', 'Les mots de passe ne correspondent pas');
+            return next(new Error('Les mots de passe ne correspondent pas'));
+        }
+    }
+    next();
+});
+
+// Hash le mot de passe et génère le token avant l'enregistrement
 tmpUserSchema.pre('save', async function (next) {
     if (this.isNew) {
-      this.password = await hashedPassword(this.password)
-      this.token = await genToken();  
+        // Hash le password
+        this.password = await hashedPassword(this.password);
+        // Génère le token
+        this.token = await genToken();
+        // Supprime le cpassword avant l'enregistrement
+        this.cpassword = undefined;
     }
-    next()
-  })
+    next();
+});
 
 const tmpUser = model('tmpuser', tmpUserSchema);
 

@@ -7,14 +7,15 @@ import Spinner from '../components/spinner'
 
 const Activation = () => {
     const dispatch = useDispatch();
-    const { email, code } = useParams();
+    const { userId, token } = useParams();
     const { status, error, message, isActive } = useSelector(state => state.auth);
 
     useEffect(() => {
-        if (email && code) {
-            dispatch(activation({ email, activationCode: code }));
+        console.log('Activation - Paramètres reçus:', { userId, token });
+        if (userId && token) {
+            dispatch(activation({ id: userId, token }));
         }
-    }, [dispatch, email, code]);
+    }, [dispatch, userId, token]);
 
     if (status === 'loading') {
         return <Spinner />;
