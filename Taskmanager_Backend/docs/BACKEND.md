@@ -46,7 +46,7 @@ Le serveur utilise Express.js avec les configurations suivantes :
 | POST | /logout | Déconnexion | Non |
 | GET | /users/profile | Obtenir le profil | Oui |
 | PUT | /users/update-profile | Mettre à jour le profil | Oui |
-| PUT | /users/update-avatar | Mettre à jour l'avatar | Oui |
+| PUT | /users/update-avatar | Mettre à jour l'avatar | Oui | //Developpement
 
 ### Tâches (/tasks)
 | Méthode | Endpoint | Description | Authentification |

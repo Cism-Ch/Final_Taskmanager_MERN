@@ -3,67 +3,74 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                line-height: 1.6;
-                color: #333;
-                max-width: 600px;
-                margin: 0 auto;
-                padding: 20px;
-            }
-            .container {
-                background-color: #f9f9f9;
-                border-radius: 8px;
-                padding: 25px;
-                border: 1px solid #eee;
-            }
-            .header {
-                text-align: center;
-                margin-bottom: 20px;
-                border-bottom: 1px solid #eee;
-                padding-bottom: 15px;
-            }
-            .button {
-                display: inline-block;
-                background-color: #3498db;
-                color: white;
-                text-decoration: none;
-                padding: 10px 20px;
-                border-radius: 4px;
-                margin: 15px 0;
-                text-align: center;
-            }
-            .footer {
-                margin-top: 30px;
-                font-size: 12px;
-                color: #777;
-                text-align: center;
-            }
-        </style>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Vérification de votre compte Tosky</title>
     </head>
-    <body>
-        <div class="container">
-            <div class="header">
-                <h2>Confirmation de compte</h2>
-            </div>
-            
-            <p>Bonjour {{name}},</p>
-            
-            <p>Merci d'avoir créé un compte. Pour finaliser votre inscription, veuillez activer votre compte en cliquant sur le bouton ci-dessous :</p>
-            
-            <div style="text-align: center;">
-                <a href="{{link}}" class="button">Activer mon compte</a>
-            </div>
-            
-            <p>Si le bouton ne fonctionne pas, vous pouvez également copier et coller le lien suivant dans votre navigateur :</p>
-            <p style="word-break: break-all; font-size: 13px;">{{link}}</p>
-            
-            {{!-- <p>Vous pouvez aussi utiliser ce code OTP: <strong>{{otp}}</strong></p> --}}
-            
-            <div class="footer">
-                <p>Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>
-            </div>
-        </div>
+    <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; background-color: #f6f9fc; color: #333333;">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%; background-color: #f6f9fc;">
+            <tr>
+                <td align="center" style="padding: 40px 0;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="600" style="max-width: 600px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <!-- Header avec Logo -->
+                        <tr>
+                            <td align="center" style="padding: 40px 30px 20px 30px; background: linear-gradient(135deg, #6366f1 0%, #ff891b 100%); border-radius: 8px 8px 0 0;">
+                                <img src="https://tasksmanager.dev/logo.png" alt="TaskManager Logo" style="width: 150px; height: auto; margin-bottom: 20px;">
+                                <h1 style="color: #ffffff; font-size: 24px; margin: 0; font-weight: 600;">Bienvenue sur Tosky</h1>
+                            </td>
+                        </tr>
+                        
+                        <!-- Contenu Principal -->
+                        <tr>
+                            <td style="padding: 40px 30px;">
+                                <p style="margin-top: 0; margin-bottom: 20px; font-size: 16px;">Bonjour {{name}},</p>
+                                
+                                <p style="margin-bottom: 20px; font-size: 16px;">Nous sommes ravis de vous accueillir sur Tosky ! Pour commencer à organiser vos tâches efficacement, veuillez confirmer votre adresse email.</p>
+                                
+                                <div style="background-color: #f8fafc; border-radius: 6px; padding: 20px; margin: 30px 0; border-left: 4px solid #e59b46;">
+                                    <p style="margin: 0; color: #4b5563; font-size: 15px;">🔐 <strong>Important :</strong> Ce lien est valide pendant 24 heures et ne peut être utilisé qu'une seule fois.</p>
+                                </div>
+                                
+                                <div style="text-align: center; margin: 35px 0;">
+                                    <a href="{{link}}" style="display: inline-block; background-color: #d68100; color: #ffffff; text-decoration: none; padding: 14px 35px; border-radius: 6px; font-weight: 600; font-size: 16px; transition: background-color 0.3s;">Activer mon compte</a>
+                                </div>
+                                
+                                <p style="margin-bottom: 10px; font-size: 14px; color: #64748b;">Si le bouton ne fonctionne pas, vous pouvez copier-coller ce lien dans votre navigateur :</p>
+                                <p style="background-color: #f8fafc; padding: 12px; border-radius: 4px; font-size: 13px; word-break: break-all; color: #4b5563; margin-bottom: 25px;">{{link}}</p>
+                                
+                                <div style="border-top: 1px solid #e2e8f0; margin-top: 30px; padding-top: 30px;">
+                                    <h3 style="color: #333333; font-size: 16px; margin: 0 0 15px 0;">Conseils de sécurité :</h3>
+                                    <ul style="margin: 0; padding-left: 20px; color: #64748b;">
+                                        <li style="margin-bottom: 8px;">Ne partagez jamais ce lien avec qui que ce soit</li>
+                                        <li style="margin-bottom: 8px;">Vérifiez que vous êtes sur le site officiel de Tosky</li>
+                                        <li>En cas de problème, contactez notre support</li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <!-- Footer -->
+                        <tr>
+                            <td style="padding: 30px; background-color: #f8fafc; border-radius: 0 0 8px 8px; border-top: 1px solid #e2e8f0;">
+                                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                    <tr>
+                                        <td style="text-align: center; padding-bottom: 20px;">
+                                            <a href="https://tasksmanager.dev/support" style="color: #4f46e5; text-decoration: none; margin: 0 10px; font-size: 14px;">Support</a>
+                                            <a href="https://tasksmanager.dev/faq" style="color: #4f46e5; text-decoration: none; margin: 0 10px; font-size: 14px;">FAQ</a>
+                                            <a href="https://tasksmanager.dev/contact" style="color: #4f46e5; text-decoration: none; margin: 0 10px; font-size: 14px;">Contact</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: center; color: #94a3b8; font-size: 12px;">
+                                            <p style="margin: 0 0 10px 0;">Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>
+                                            <p style="margin: 0;">© 2025 TaskManager. Tous droits réservés.</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
     </body>
-</html></div>
+</html>

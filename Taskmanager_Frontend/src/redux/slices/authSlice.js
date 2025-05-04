@@ -110,7 +110,7 @@ export const getProfile = createAsyncThunk('auth/profile', async (_, { rejectWit
         console.log('Début getProfile - Requête au backend');
         // Changer l'URL pour utiliser la route correcte
         const { data } = await axios.get(`${API_URL}/auth/users/profile`);
-        console.log('Réponse getProfile:', data);
+        // console.log('Réponse getProfile:', data);
 
         if (!data) {
             console.error('Aucune donnée reçue du backend');
@@ -142,7 +142,7 @@ export const updateProfile = createAsyncThunk(
             const currentUser = getState().auth.user; // Récupérer l'état actuel
             console.log('Données envoyées à l\'API:', profileData);
             const { data } = await axios.put(`${API_URL}/auth/users/update-profile`, profileData);
-            console.log('Réponse de l\'API:', data);
+            // console.log('Réponse de l\'API:', data);
             // Forcer un rafraîchissement complet du profil
             await dispatch(getProfile());
             // Fusionner immédiatement les nouvelles données avec l'état actuel
@@ -157,7 +157,7 @@ export const updateProfile = createAsyncThunk(
             dispatch(getUserStats());
             return updatedUser; // Retourner l'utilisateur fusionné
         } catch (err) {
-            console.error('Erreur updateProfile:', err.response?.data);
+            // console.error('Erreur updateProfile:', err.response?.data);
             const errorCode = err.response?.status || 500;
             let errorMessage = 'Erreur lors de la mise à jour du profil';
 
@@ -201,7 +201,7 @@ export const updateAvatar = createAsyncThunk(
     'auth/update-avatar',
     async (formData, { dispatch, rejectWithValue }) => {
         try {
-            console.log('Envoi de la requête updateAvatar');
+            // console.log('Envoi de la requête updateAvatar');
             const { data } = await axios.put(
                 `${API_URL}/auth/users/update-avatar`,
                 formData,
@@ -211,7 +211,7 @@ export const updateAvatar = createAsyncThunk(
                     }
                 }
             );
-            console.log('Réponse updateAvatar:', data);
+            // console.log('Réponse updateAvatar:', data);
             
             // Mettre à jour les stats et le profil après la mise à jour de l'avatar
             if (data.success) {
@@ -491,7 +491,7 @@ const authSlice = createSlice({
             state.message = null;
         })
         .addCase(updateAvatar.fulfilled, (state, action) => {
-            console.log('updateAvatar.fulfilled - payload:', action.payload);
+            // console.log('updateAvatar.fulfilled - payload:', action.payload);
             
             if (!action.payload.success) {
                 state.status = 'failed';
@@ -519,9 +519,9 @@ const authSlice = createSlice({
             state.message = 'Photo de profil mise à jour avec succès';
             state.error = null;
 
-            console.log('updateAvatar.fulfilled - nouvel état:', {
-                user: state.user
-            });
+            // console.log('updateAvatar.fulfilled - nouvel état:', {
+            //     user: state.user
+            // });
             
             console.log('État mis à jour:', {
                 status: state.status,
@@ -530,7 +530,7 @@ const authSlice = createSlice({
             });
         })
         .addCase(updateAvatar.rejected, (state, action) => {
-            console.error('updateAvatar.rejected:', action.payload);
+            // console.error('updateAvatar.rejected:', action.payload);
             state.status = 'failed';
             state.error = {
                 message: action.payload?.message || 'Erreur lors de la mise à jour de la photo de profil'
@@ -541,7 +541,7 @@ const authSlice = createSlice({
             state.status = 'loading';
         })
         .addCase(getUserStats.fulfilled, (state, action) => {
-            console.log('getUserStats.fulfilled - payload:', action.payload);
+            // console.log('getUserStats.fulfilled - payload:', action.payload);
             state.status = 'success';
             state.userStats = action.payload;
             

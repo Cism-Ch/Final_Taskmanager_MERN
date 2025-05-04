@@ -75,7 +75,7 @@ export const useProfileUpdate = () => {
         return;
       }
 
-      console.log('Données nettoyées:', cleanedData);
+      // console.log('Données nettoyées:', cleanedData);
       
       const [updateResult] = await Promise.all([
         dispatch(updateProfile(cleanedData)).unwrap(),

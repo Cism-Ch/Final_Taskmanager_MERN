@@ -1,11 +1,94 @@
-<html>
-    <head>
-        <style>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenue sur Tosky</title>
+    <style>
+        @media screen and (max-width: 600px) {
+            .container {
+                width: 100% !important;
+                padding: 10px !important;
+            }
+            .feature {
+                width: 100% !important;
+            }
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Arial', sans-serif; background-color: #f4f4f4;">
+    <div class="container" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <!-- Header avec Logo -->
+        <div style="text-align: center; padding: 20px 0; border-bottom: 2px solid #f0f0f0;">
+            <img src="taskMan.png" alt="TaskManager Logo" style="max-width: 150px; height: auto;" />
+        </div>
 
-        </style>
-    </head>
-    <body>
-        <p>Hi {{name}},</p>
-        <p>Welcome to your new account</p>
-    </body>
+        <!-- Message de Bienvenue -->
+        <div style="padding: 30px 0; text-align: center;">
+            <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">Bienvenue {{name}} !</h1>
+            <p style="color: #7f8c8d; font-size: 16px; line-height: 1.6;">Nous sommes ravis de vous compter parmi nous. Votre compte est maintenant activé !</p>
+        </div>
+
+        <!-- Fonctionnalités Principales -->
+        <div style="padding: 20px 0;">
+            <h2 style="color: #2c3e50; font-size: 22px; margin-bottom: 20px;">Découvrez nos fonctionnalités clés</h2>
+            
+            <div class="feature" style="margin-bottom: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 6px;">
+                <h3 style="color: #3498db; margin: 0 0 10px 0; font-size: 18px;">✓ Gestion des Tâches</h3>
+                <p style="color: #7f8c8d; margin: 0; font-size: 14px;">Créez, organisez et suivez vos tâches facilement</p>
+            </div>
+            
+            <div class="feature" style="margin-bottom: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 6px;">
+                <h3 style="color: #3498db; margin: 0 0 10px 0; font-size: 18px;">✓ Catégorisation</h3>
+                <p style="color: #7f8c8d; margin: 0; font-size: 14px;">Catégoriser vos tâches et travailler efficacement avec votre Tasks Manager</p>
+            </div>
+            
+            <div class="feature" style="margin-bottom: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 6px;">
+                <h3 style="color: #3498db; margin: 0 0 10px 0; font-size: 18px;">✓ Suivi de Progression</h3>
+                <p style="color: #7f8c8d; margin: 0; font-size: 14px;">Visualisez votre progression en temps réel</p>
+            </div>
+        </div>
+
+        <!-- Prochaines Étapes -->
+        <div style="padding: 20px 0; border-top: 2px solid #f0f0f0;">
+            <h2 style="color: #2c3e50; font-size: 22px; margin-bottom: 20px;">Pour commencer</h2>
+            <ol style="color: #7f8c8d; font-size: 14px; line-height: 1.6; padding-left: 20px;">
+                <li>Complétez votre profil</li>
+                <li>Créez votre première tâche</li>
+                <li>Explorez le tableau de bord</li>
+                <li>Personnalisez vos paramètres</li>
+            </ol>
+        </div>
+
+        <!-- Call to Action -->
+        <div style="text-align: center; padding: 30px 0;">
+            <a href="https://tosky-taskmanager-app-mern.onrender.com" style="display: inline-block; padding: 12px 30px; background-color: #3498db; color: #ffffff; text-decoration: none; border-radius: 25px; font-weight: bold; font-size: 16px;">Accéder à mon espace</a>
+        </div>
+
+        <!-- Documentation et Aide -->
+        <div style="padding: 20px 0; background-color: #f8f9fa; border-radius: 6px; margin: 20px 0;">
+            <h3 style="color: #2c3e50; font-size: 18px; margin: 0 0 15px 0; text-align: center;">Besoin d'aide ?</h3>
+            <div style="text-align: center;">
+                <a href="https://taskmanager.com/docs" style="color: #3498db; text-decoration: none; margin: 0 10px;">Documentation</a>
+                <span style="color: #bdc3c7;">|</span>
+                <a href="https://taskmanager.com/faq" style="color: #3498db; text-decoration: none; margin: 0 10px;">FAQ</a>
+                <span style="color: #bdc3c7;">|</span>
+                <a href="https://taskmanager.com/support" style="color: #3498db; text-decoration: none; margin: 0 10px;">Support</a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="padding-top: 20px; border-top: 2px solid #f0f0f0; text-align: center;">
+            <div style="margin-bottom: 20px;">
+                <a href="https://twitter.com/taskmanager" style="color: #3498db; text-decoration: none; margin: 0 10px;">Twitter</a>
+                <a href="https://linkedin.com/company/taskmanager" style="color: #3498db; text-decoration: none; margin: 0 10px;">LinkedIn</a>
+                <a href="https://facebook.com/taskmanager" style="color: #3498db; text-decoration: none; margin: 0 10px;">Facebook</a>
+            </div>
+            <p style="color: #95a5a6; font-size: 12px; margin: 0;">
+                © 2025 TaskManager. Tous droits réservés.<br>
+                Vous recevez cet email car vous vous êtes inscrit sur TaskManager.
+            </p>
+        </div>
+    </div>
+</body>
 </html>

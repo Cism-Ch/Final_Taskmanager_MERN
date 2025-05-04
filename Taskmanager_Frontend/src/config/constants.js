@@ -42,12 +42,12 @@ export const getMediaUrl = (path) => {
   
   const fullUrl = `${MEDIA_URL}${mediaPath}`;
   
-  console.log('Construction URL média:', {
-    originalPath: path,
-    mediaPath,
-    baseUrl: MEDIA_URL,
-    fullUrl
-  });
+  // console.log('Construction URL média:', {
+  //   originalPath: path,
+  //   mediaPath,
+  //   baseUrl: MEDIA_URL,
+  //   fullUrl
+  // });
 
   return fullUrl;
 };

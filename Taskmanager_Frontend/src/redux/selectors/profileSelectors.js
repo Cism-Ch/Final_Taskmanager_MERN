@@ -7,7 +7,7 @@ import { createSelector } from '@reduxjs/toolkit';
 // Sélectionne le profil utilisateur complet
 export const selectUserProfile = (state) => {
     const user = state.auth.user;
-    console.log('State dans selectUserProfile:', user);
+    // console.log('State dans selectUserProfile:', user);
     // Gérer toutes les structures possibles
     if (!user) return null;
     return user.data || user.user || user;
@@ -16,7 +16,7 @@ export const selectUserProfile = (state) => {
 // Sélectionne l'avatar de l'utilisateur avec fallback
 export const selectUserAvatar = (state) => {
     const userData = state.auth.user;
-    console.log('Avatar dans selectUserAvatar:', userData?.avatar);
+    // console.log('Avatar dans selectUserAvatar:', userData?.avatar);
     return userData?.avatar || '/images/defaultProfile.svg';
 };
 
@@ -26,7 +26,7 @@ export const selectUserInfo = createSelector(
     [selectUserProfile],
     (profile) => {
         if (!profile) return null;
-        console.log('selectUserInfo - données brutes:', profile);
+        // console.log('selectUserInfo - données brutes:', profile);
         
         // S'assurer que toutes les propriétés sont définies
         return {
@@ -73,7 +73,7 @@ export const selectIsProfileUpdating = (state) => state.auth.status === 'loading
 export const selectTaskStats = createSelector(
     [(state) => state.tasks.tasks],
     (tasks) => {
-        console.log('Calcul des stats - tasks:', tasks);
+        // console.log('Calcul des stats - tasks:', tasks);
         return {
             total: tasks.length,
             pending: tasks.filter(task => task.status === "pending").length,
