@@ -22,7 +22,13 @@ const tmpUserSchema = new Schema({
     token: { type: String },
 
     password: { type: String, required: true, minlength: 8, trim: true },
-    cpassword: { type: String, required: true, trim: true },
+    cpassword: {
+        type: String,
+        required: function() {
+            return this.isNew; // requis uniquement lors de la création
+        },
+        trim: true
+    },
 
     createdAt: {
         type: Date,
@@ -33,20 +39,10 @@ const tmpUserSchema = new Schema({
 
 })
 
-// Valider que cpassword correspond à password
+// Valider que cpassword correspond à password uniquement pour les nouveaux documents
 tmpUserSchema.pre('validate', function(next) {
-    if (this.isModified('password') || this.isModified('cpassword')) {
-        if (this.password !== this.cpassword) {
-            this.invalidate('cpassword', 'Les mots de passe ne correspondent pas');
-            return next(new Error('Les mots de passe ne correspondent pas'));
-        }
-    }
-    next();
-});
-
-// Valider que cpassword correspond à password avant la validation
-tmpUserSchema.pre('validate', function(next) {
-    if (this.isModified('password') || this.isModified('cpassword')) {
+    // Valider uniquement si c'est un nouveau document ou si cpassword a été modifié
+    if (this.isNew || this.isModified('cpassword')) {
         if (this.password !== this.cpassword) {
             this.invalidate('cpassword', 'Les mots de passe ne correspondent pas');
             return next(new Error('Les mots de passe ne correspondent pas'));

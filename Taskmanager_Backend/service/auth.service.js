@@ -338,6 +338,7 @@ const Activate = async (payload) => {
         }
 
         // Validation des données avant création
+
         const userDataSchema = Joi.object({
             username: Joi.string().required().min(3).max(30),
             email: Joi.string().required().email(),
@@ -346,9 +347,12 @@ const Activate = async (payload) => {
             lastName: Joi.string().allow('', null),
             avatar: Joi.string().allow('', null),
             dateOfBirth: Joi.date().allow(null),
-            gender: Joi.string().valid('homme', 'femme', 'autre', 'non_specifie').default('non_specifie'),
+            gender: Joi.string().valid('homme', 'femme', 'non_specifie').default('non_specifie'),
             profession: Joi.string().allow('', null),
-            description: Joi.string().allow('', null)
+            description: Joi.string().allow('', null),
+            is_active: Joi.boolean().required(),
+            createdAt: Joi.date().required(),
+            updatedAt: Joi.date().required()
         });
 
         // Préparer les données complètes de l'utilisateur
@@ -368,12 +372,33 @@ const Activate = async (payload) => {
             updatedAt: new Date()
         };
 
+        // Log des données à valider
+        console.log('Activation - Données utilisateur à valider:', {
+            username: userData.username,
+            email: userData.email,
+            hasPassword: !!userData.password,
+            is_active: userData.is_active,
+            timestamp: new Date().toISOString()
+        });
+
         // Valider les données
-        const { error } = userDataSchema.validate(userData);
+        const { error, value } = userDataSchema.validate(userData);
         if (error) {
-            console.error('Activation - Erreur de validation:', error.details[0].message);
+            console.error('Activation - Erreur de validation:', {
+                message: error.details[0].message,
+                field: error.details[0].path[0],
+                value: error.details[0].context.value,
+                timestamp: new Date().toISOString()
+            });
             throw new Error(`Données utilisateur invalides: ${error.details[0].message}`);
         }
+
+        console.log('Activation - Validation réussie:', {
+            username: value.username,
+            email: value.email,
+            isActive: value.is_active,
+            timestamp: new Date().toISOString()
+        });
 
         console.log('Activation - Données utilisateur validées:', {
             username: userData.username,
@@ -396,11 +421,33 @@ const Activate = async (payload) => {
 
         let newUser;
         try {
+            // S'assurer que l'utilisateur temporaire n'est pas déjà activé
+            if (tmpUser.active) {
+                console.warn('Activation - Utilisateur déjà activé:', {
+                    userId: tmpUser._id,
+                    email: tmpUser.email,
+                    timestamp: new Date().toISOString()
+                });
+                return {
+                    status: 400,
+                    isOk: false,
+                    message: "Ce compte est déjà activé",
+                    data: null
+                };
+            }
+
             // Mise à jour de l'utilisateur temporaire comme actif
             tmpUser.active = true;
-            await tmpUser.save();
-            console.log('Activation - Utilisateur temporaire marqué comme actif');
+            const updatedTmpUser = await tmpUser.save();
+            console.log('Activation - Utilisateur temporaire marqué comme actif:', {
+                userId: updatedTmpUser._id,
+                email: updatedTmpUser.email,
+                active: updatedTmpUser.active,
+                timestamp: new Date().toISOString()
+            });
 
+            // Création de l'utilisateur permanent
+            console.log('Activation - Création de l\'utilisateur permanent...');
             newUser = await UserRepo.createUser(userData);
             
             if (!newUser) {
