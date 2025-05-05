@@ -7,6 +7,13 @@ import MainFilters from '../components/TodoFilter/MainFilters';
 import DateRangeFilter from '../components/TodoFilter/DateRangeFilter';
 import SortingOptions from '../components/TodoFilter/SortingOptions';
 import CategorySelect from '../components/TodoFilter/CategorySelect';
+import {
+  HiOutlineAdjustmentsHorizontal,
+  HiOutlineCalendarDays,
+  HiOutlineArrowsUpDown,
+  HiOutlineFunnel,
+  HiOutlineTag
+} from 'react-icons/hi2';
 
 /**
  * @description Composant principal de filtrage des tâches
@@ -92,9 +99,7 @@ const TodoFilter = () => {
         aria-expanded={isOpen}
         title="Ouvrir les filtres de tâches"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-700 dark:text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-        </svg>
+        <HiOutlineAdjustmentsHorizontal className="h-6 w-6 text-gray-700 dark:text-gray-200" />
       </button>
 
       <section
@@ -109,31 +114,45 @@ const TodoFilter = () => {
           <div className="space-y-20">
             
             <div className="bg-white/30 dark:bg-gray-700/40 p-3 rounded-lg hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all">
+              <div className="flex items-center gap-2 mb-4">
+                <HiOutlineFunnel className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+                <h3 className="font-medium text-gray-700 dark:text-gray-200">Filtres principaux</h3>
+              </div>
               <MainFilters
-              currentFilter={currentFilter}
-              onFilterChange={handleFilterChange}
-              isLoading={isLoading}
-            />
+                currentFilter={currentFilter}
+                onFilterChange={handleFilterChange}
+                isLoading={isLoading}
+              />
             </div>
 
             <div className="bg-white/30 dark:bg-gray-700/40 p-3 rounded-lg hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all">
-            
-            <DateRangeFilter
-              dateRange={dateRange}
-              onDateChange={handleDateChange}
-              isLoading={isLoading}
-            />
+              <div className="flex items-center gap-2 mb-4">
+                <HiOutlineCalendarDays className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+                <h3 className="font-medium text-gray-700 dark:text-gray-200">Période</h3>
+              </div>
+              <DateRangeFilter
+                dateRange={dateRange}
+                onDateChange={handleDateChange}
+                isLoading={isLoading}
+              />
             </div>
 
             <div className="bg-white/30 dark:bg-gray-700/40 p-3 rounded-lg hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all">
-              <h3 className="font-medium text-gray-700 dark:text-gray-200 mb-2">Trier par</h3>
+              <div className="flex items-center gap-2 mb-4">
+                <HiOutlineArrowsUpDown className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+                <h3 className="font-medium text-gray-700 dark:text-gray-200">Trier par</h3>
+              </div>
               <SortingOptions
                 currentSortType={currentSortType}
                 currentSortOrder={currentSortOrder}
                 onSort={handleSort}
                 isLoading={isLoading}
               />
-              <div title="Ce filtre n'affiche que les catégories présentes dans le tableau de bord">
+              <div title="Ce filtre n'affiche que les catégories présentes dans le tableau de bord" className="mt-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <HiOutlineTag className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+                  <h3 className="font-medium text-gray-700 dark:text-gray-200">Catégories</h3>
+                </div>
                 <CategorySelect
                   currentCategory={currentCategory}
                   onCategoryChange={handleCategoryChange}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Header, TodoComputed, TodoCreate, TodoFilter, TodoList, Sidebar, Footer } from '../components';
+import { Header, TodoComputed, TodoFilter, TodoList, Sidebar, Footer, TodoTimeline } from '../components';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAllTasks, getFilter, getOwnerTasks } from '../redux/slices/taskSlice';
 import { selectUser } from '../redux/slices/authSlice';
@@ -12,6 +12,7 @@ const Home = () => {
   const filter = useSelector(getFilter);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
+  const [timelineOpen, setTimelineOpen] = useState(false);
 
   const itemsLeft = tasks.filter((task) => task.status === 'pending').length;
 
@@ -45,6 +46,15 @@ const Home = () => {
 
         {/* Mobile Controls */}
         <div className="lg:hidden fixed bottom-4 right-4 flex flex-col gap-3 z-50">
+          <button
+            onClick={() => setTimelineOpen(true)}
+            className="p-3 bg-white/20 dark:bg-gray-800/30 backdrop-blur-md rounded-full shadow-lg hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-all duration-200"
+            aria-label="Ouvrir la timeline"
+          >
+            <svg className="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
           <button
             onClick={toggleSidebar}
             className="p-3 bg-white/20 dark:bg-gray-800/30 backdrop-blur-md rounded-full shadow-lg hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-all duration-200"
@@ -95,8 +105,19 @@ const Home = () => {
             className="relative row-start-1 lg:col-start-2 p-4 space-y-4 overflow-y-auto min-h-[calc(100vh-4rem)]"
           >
               <Header />
-              <TodoCreate />
-            <TodoList tasks={filteredTasks()} />
+              
+              <button
+                onClick={() => setTimelineOpen(true)}
+                className="w-full p-4 my-4 flex items-center justify-center gap-2 bg-white/20 dark:bg-gray-800/30 backdrop-blur-md rounded-lg shadow-lg hover:bg-white/30 dark:hover:bg-gray-700/40 active:scale-[0.98] transform transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+                aria-label="Afficher la timeline des tâches"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="text-lg font-medium text-gray-700 dark:text-gray-300">Timeline des tâches</span>
+              </button>
+
+              <TodoList tasks={filteredTasks()} />
             {itemsLeft > 0 && <TodoComputed itemsLeft={itemsLeft} />}
           </main>
 
@@ -115,6 +136,9 @@ const Home = () => {
         </footer>
         
       </div>
+
+      {/* Render TodoTimeline at the root level */}
+      <TodoTimeline isOpen={timelineOpen} onClose={() => setTimelineOpen(false)} />
     </div>
   );
 };

@@ -6,7 +6,7 @@ import { FaClipboardList, FaHourglass, FaTrash, FaStar, FaCheckCircle } from 're
 
 const StatCard = ({ title, value, icon, description }) => (
   <div
-    className="flex items-center w-full bg-white/50 dark:bg-gray-900/40 rounded-full shadow-lg py-3 px-4 hover:bg-white/10 dark:hover:bg-gray-900/50 transition-all duration-300 backdrop-blur-sm hover:shadow-xl motion-safe:hover:scale-[1.02]"
+    className="flex items-center w-full bg-white/50 dark:bg-gray-900/60 rounded-full shadow-lg py-3 px-4 hover:bg-white/10 dark:hover:bg-gray-900/50 transition-all duration-300 backdrop-blur-sm hover:shadow-xl motion-safe:hover:scale-[1.02]"
     role="article"
     aria-label={`Statistique: ${title}`}
   >
@@ -20,18 +20,18 @@ const StatCard = ({ title, value, icon, description }) => (
     <div className="flex flex-grow justify-between items-center">
       <div className="flex items-center gap-2">
         <span
-          className="text-xl font-bold text-gray-900 dark:text-white"
+          className="text-xl font-bold text-gray-200 dark:text-white"
           aria-label={`${value} ${title}`}
         >
           {value}
         </span>
-        <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">
+        <h4 className="text-md font-medium text-gray-300 dark:text-gray-300">
           {title}
         </h4>
       </div>
       {description && (
         <p
-          className="text-xs text-gray-600 dark:text-gray-400 ml-auto"
+          className="text-sm text-gray-200 dark:text-gray-400 ml-auto"
           aria-label={description}
         >
           {description}

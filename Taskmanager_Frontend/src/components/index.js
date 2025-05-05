@@ -7,4 +7,5 @@ export { default as TodoListItem } from './TodoListItem';
 export { default as Profile_avatar } from './profile_avatar';
 export { default as Sidebar } from './Sidebar';
 export { default as Footer } from './Footer';
+export { default as TodoTimeline } from './TodoTimeline';
 export * from './icons';
