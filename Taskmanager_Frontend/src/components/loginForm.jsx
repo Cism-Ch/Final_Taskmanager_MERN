@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { notifications } from '../services/notifications';
 import { useForm } from "react-hook-form";
 import { isFormInvalid } from '../utils/isFormInvalide';
 import { useDispatch, useSelector } from 'react-redux'
@@ -8,14 +9,21 @@ import { motion } from 'framer-motion';
 
 function LoginForm() {
     const [showPwd, setShowPwd] = useState(false)
-    const {register, handleSubmit, formState: {errors}} = useForm()  
-    const navigate = useNavigate()  
+    const {register, handleSubmit, formState: {errors}} = useForm()
+    const navigate = useNavigate()
     const dispatch = useDispatch()
 
     const {status, isAuthenticated} = useSelector(selectAuthState)
 
     const onHandleSubmit = (data) => {
       dispatch(authenticate(data))
+        .unwrap()
+        .then(() => {
+          notifications.success('Connexion réussie!')
+        })
+        .catch((error) => {
+          notifications.error(error?.message || "Échec de la connexion")
+        });
     };
 
     useEffect(() => {
@@ -27,10 +35,13 @@ function LoginForm() {
     useEffect(() => {
       if (isFormInvalid(errors)) {
         document.getElementById('loginSubmit').classList.add(["hover:cursor-not-allowed"])
+        Object.keys(errors).forEach(key => {
+          notifications.warning(errors[key].message)
+        });
       } else {
         document.getElementById('loginSubmit').classList.remove(["hover:cursor-not-allowed"])
       }
-    })
+    }, [errors])
 
   return (
     <motion.div 

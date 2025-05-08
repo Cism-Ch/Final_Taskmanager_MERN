@@ -5,7 +5,7 @@ import { assignTaskToUser, selectTaskLoadingStatus } from '../redux/slices/authS
 import Spinner  from './spinner';
 import propTypes from 'prop-types';
 import { useEffect, useCallback, memo } from 'react';
-import { toast } from 'react-toastify';
+import { notifications } from '../services/notifications';
 
 const StarIcon = memo(({ filled }) => (
   <svg
@@ -60,13 +60,13 @@ const TodoListItem = memo(({ todo, onEdit, ...props }) => {
   const handleDelete = useCallback(async () => {
     try {
       if (!id) {
-        toast.error("ID de tâche invalide");
+        notifications.error("ID de tâche invalide");
         return;
       }
       await dispatch(deleteTask(id)).unwrap();
-      toast.success("Tâche supprimée avec succès");
+      notifications.success("Tâche supprimée avec succès");
     } catch (error) {
-      toast.error(`Erreur lors de la suppression: ${error.message || 'Une erreur est survenue'}`);
+      notifications.error(error.message || 'Erreur lors de la suppression');
     }
   }, [dispatch, id]);
 
@@ -75,27 +75,27 @@ const TodoListItem = memo(({ todo, onEdit, ...props }) => {
       const newStatus = status === 'pending' ? 'done' : 'pending';
       const updatedTodo = { ...todo, status: newStatus };
       await dispatch(putTask(updatedTodo)).unwrap();
-      toast.success(`Tâche marquée comme ${newStatus === 'done' ? 'terminée' : 'à faire'}`);
+      notifications.info(`Tâche marquée comme ${newStatus === 'done' ? 'terminée' : 'à faire'}`);
     } catch (error) {
-      toast.error('Erreur lors de la mise à jour du statut');
+      notifications.error(error.message || 'Erreur lors de la mise à jour du statut');
     }
   }, [dispatch, status, todo]);
 
   const toggleImportant = useCallback(async () => {
     try {
       await dispatch(toggleTaskImportance(id)).unwrap();
-      toast.success(isImportant ? 'Importance retirée' : 'Tâche marquée comme importante');
+      notifications.info(isImportant ? 'Importance retirée' : 'Tâche marquée comme importante');
     } catch (error) {
-      toast.error('Erreur lors de la mise à jour de l\'importance');
+      notifications.error(error.message || 'Erreur lors de la mise à jour de l\'importance');
     }
   }, [dispatch, id, isImportant]);
 
   const handleAssign = useCallback(async () => {
     try {
       await dispatch(assignTaskToUser(id)).unwrap();
-      toast.success('Tâche assignée avec succès');
+      notifications.success('Tâche assignée avec succès');
     } catch (error) {
-      toast.error('Erreur lors de l\'assignation de la tâche');
+      notifications.error(error.message || 'Erreur lors de l\'assignation de la tâche');
     }
   }, [dispatch, id]);
 
@@ -107,9 +107,9 @@ const TodoListItem = memo(({ todo, onEdit, ...props }) => {
 
   useEffect(() => {
     if (taskError && taskStatus === 'failed') {
-      toast.error(`Erreur: ${taskError}`);
+      notifications.error(taskError);
     }
-  }, [taskError, taskStatus]);
+  });
 
   const formatDate = useCallback((date) => {
     if (!date) return '';
@@ -136,7 +136,7 @@ const TodoListItem = memo(({ todo, onEdit, ...props }) => {
   return (
     <article
       {...props}
-      className={`flex flex-col gap-2 border-b border-gray-200 p-4 dark:border-slate-500 motion-safe:hover:scale-[1.05] transition-all duration-300 ${
+      className={`flex flex-col gap-2 border-b border-gray-200 p-4 pb-10 dark:border-slate-500 motion-safe:hover:scale-[1.05] transition-all duration-300 ${
         isImportant ? 'bg-amber-50/50 dark:bg-amber-900/20' : ''
       }`}
       role="listitem"

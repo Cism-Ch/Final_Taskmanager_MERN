@@ -41,31 +41,43 @@ const ActivityItem = memo(({ type, title, date, status }) => {
   const getStatusColor = () => {
     switch (status) {
       case 'completed':
-        return 'text-green-600 dark:text-green-400';
+        return 'text-green-700 dark:text-green-400 bg-green-100 dark:bg-green-900';
       case 'pending':
-        return 'text-yellow-600 dark:text-yellow-400';
+        return 'text-yellow-700 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-900';
       case 'deleted':
-        return 'text-red-600 dark:text-red-400';
+        return 'text-red-700 dark:text-red-400 bg-red-100 dark:bg-red-900';
       default:
-        return 'text-gray-600 dark:text-gray-400';
+        return 'text-gray-700 dark:text-gray-400 bg-gray-100 dark:bg-gray-800';
     }
   };
 
   return (
-    <div className="flex items-start gap-4 p-4 bg-white/20 dark:bg-gray-800/30 rounded-2xl transition-all duration-300 hover:bg-white/30 dark:hover:bg-gray-800/40 ">
-      <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-white/30 dark:bg-gray-700/50 hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all">
-        {getIcon()}
+    <div className="flex items-center p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-300">
+      <div className="relative flex-shrink-0">
+        <div className="absolute inset-0 bg-current opacity-10 rounded-full scale-150 animate-pulse"></div>
+        <div className="relative w-12 h-12 flex items-center justify-center rounded-full bg-gradient-to-br from-gray-100 to-white dark:from-gray-700/20 dark:to-gray-700 shadow-md">
+          {getIcon()}
+        </div>
       </div>
-      <div className="flex-grow min-w-0">
-        <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
-          {title}
-        </p>
-        <p className={`text-sm ${getStatusColor()}`}>
-          {status}
-        </p>
-        <time className="text-xs text-gray-400 dark:text-gray-500">
-          {new Date(date).toLocaleString()}
-        </time>
+      <div className="flex-grow min-w-0 ml-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <p className="text-sm font-medium text-gray-900 dark:text-white truncate pr-4 pl-4">
+            {title}
+          </p>
+          <div className="flex items-center gap-4">
+            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor()}`}>
+              {status}
+            </span>
+            <time className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
+              {new Date(date).toLocaleString('fr-FR', {
+                day: 'numeric',
+                month: 'short',
+                hour: '2-digit',
+                minute: '2-digit'
+              })}
+            </time>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -96,25 +108,28 @@ const ActivityFeed = memo(({ isLoading, error }) => {
   }
 
   return (
-    <section 
-      className="mt-6 bg-white/10 dark:bg-black/10 rounded-xl p-6 shadow-lg backdrop-blur-md border border-gray-200 dark:border-slate-500"
+    <section
+      className="mt-6 bg-white dark:bg-gray-900/50 backdrop-filter backdrop-blur-md rounded-xl shadow-lg border border-gray-100 dark:border-gray-500"
       role="region"
       aria-label="Activités récentes"
     >
-      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">
-        Activités récentes
-      </h3>
+      <div className="border-b border-gray-100 dark:border-gray-800 p-4">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          Activités récentes
+        </h3>
+      </div>
 
-      <div 
-        className="divide-y divide-gray-200 dark:divide-gray-700 max-h-80 overflow-auto space-y-4 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600"
-        style={{
-          scrollbarGutter: 'stable',
-          scrollBehavior: 'smooth'
-        }}
-      >
+      <div className="p-6">
+        <div
+          className="divide-y divide-gray-100 dark:divide-gray-700 p-2 max-h-96 overflow-auto space-y-2 scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-gray-700"
+          style={{
+            scrollbarGutter: 'stable',
+            scrollBehavior: 'smooth'
+          }}
+        >
         {isLoading ? (
-          <div className="py-4 flex justify-center" role="status" aria-label="Chargement des activités">
-            <Spinner />
+          <div className="flex items-center justify-center py-8" role="status" aria-label="Chargement des activités">
+            <Spinner className="w-8 h-8" />
           </div>
         ) : activities.length > 0 ? (
           activities.map((activity, index) => (
@@ -124,10 +139,13 @@ const ActivityFeed = memo(({ isLoading, error }) => {
             />
           ))
         ) : (
-          <p className="py-4 text-center text-gray-500 dark:text-gray-400 animate-fadeIn">
-            Aucune activité récente
-          </p>
+          <div className="py-8 text-center">
+            <p className="text-sm text-gray-500 dark:text-gray-400 animate-fadeIn">
+              Aucune activité récente
+            </p>
+          </div>
         )}
+      </div>
       </div>
     </section>
   );

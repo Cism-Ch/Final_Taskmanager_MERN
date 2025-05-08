@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { IconCross } from '../icons';
 import { selectEmailChangeStatus, selectEmailChangeError, selectPendingEmail, selectUser } from '../../redux/slices/authSlice';
 import { initiateEmailChange } from '../../redux/slices/authSlice';
-import { toast } from 'react-hot-toast';
+import { notifications } from '../../services/notifications';
 import { useProfileUpdate } from '../../hooks/useProfileUpdate';
 
 // Fonction utilitaire pour comparer les valeurs modifiées avec les valeurs initiales
@@ -267,7 +267,7 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
         Object.entries(parsedErrors).forEach(([field, message]) => {
           if (modifiedFields.has(field)) {
             filteredErrors[field] = message;
-            toast.error(`${field}: ${message}`);
+            notifications.error(`${field}: ${message}`);
           }
         });
         setErrors(filteredErrors);
@@ -276,7 +276,7 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
       }
     } catch {
       setErrors({ submit: errorMessage });
-      toast.error(errorMessage);
+      notifications.error(errorMessage);
     }
   };
 
@@ -316,7 +316,7 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
         console.log('Erreurs de validation:', validationErrors);
         setErrors(validationErrors);
         Object.entries(validationErrors).forEach(([field, message]) => {
-          toast.error(`${field}: ${message}`);
+          notifications.error(`${field}: ${message}`);
         });
         return;
       }
@@ -326,7 +326,7 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
         console.log('Tentative de changement d\'email:', formData.email);
         await dispatch(initiateEmailChange(formData.email)).unwrap();
         console.log('Email de vérification envoyé');
-        toast.success('Vérifiez votre email pour confirmer le changement');
+        notifications.success('Vérifiez votre email pour confirmer le changement');
         return;
       }
 
@@ -335,7 +335,7 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
         console.log('Envoi de la mise à jour du profil');
         await handleUpdateProfile(changedData, modifiedFields);
         console.log('Profil mis à jour avec succès');
-        toast.success('Profil mis à jour avec succès');
+        notifications.success('Profil mis à jour avec succès');
         setModifiedFields(new Set());
       }
     } catch (err) {
@@ -350,40 +350,46 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center md:mx-3/4 lg:mx-80 my-3/5">
-      <div className="fixed inset-0 bg-black/70 backdrop-blur-lg transition-opacity duration-300"
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center md:mx-3/4 lg:mx-80 my-3/5 animate-fadeIn">
+      <div
+        className="fixed inset-0 bg-black/60 backdrop-blur-lg transition-all duration-500"
         onClick={(e) => {
-          e.stopPropagation(); // Empêcher la propagation au parent
+          e.stopPropagation();
           onClose();
         }}
         aria-hidden="true"
       />
-      <div className="relative w-full h-full bg-white/60 dark:bg-black/10 backdrop-blur-md  overflow-y-auto mx-auto transform overflow-hidden p-6 sm:p-6 md:p-20 shadow-xl border border-gray-200/40 dark:border-slate-500/50 transition-all duration-300 rounded-2xl">
+      <div className="relative w-full max-w-4xl h-[90vh] bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg overflow-y-auto mx-auto transform scale-100 p-6 shadow-2xl border border-gray-200/20 dark:border-gray-700/20 transition-all duration-300 rounded-2xl animate-slideIn">
         {/* Bouton fermer */}
         <button
           onClick={handleClose}
-          className="absolute right-4 top-4 text-gray-400 hover:text-gray-200 dark:text-gray-100 dark:hover:text-orange-300"
+          className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors duration-200"
         >
           <IconCross />
         </button>
 
         {/* Titre */}
-        <h3 className="mb-4 text-xl font-medium text-gray-700 dark:text-gray-100">
+        <h3 className="mb-4 text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
           Modifier le profil
         </h3>
-        <p className='text-orange-300/70 mb-8'>Déconnecter vous et réconnecter vous pour actualiser les modifications</p>
+        <p className="mb-8 text-sm text-gray-500 dark:text-gray-400 bg-yellow-50/50 dark:bg-yellow-900/20 border border-yellow-200/50 dark:border-yellow-700/30 rounded-lg p-3">
+          Déconnectez-vous et reconnectez-vous pour actualiser les modifications
+        </p>
 
         {/* Message d'erreur général */}
         {(updateError || errors.submit) && (
-          <div className="mb-6 rounded-lg bg-red-50/50 p-4 dark:bg-red-900/30 border border-red-200/50 dark:border-red-800/50 backdrop-blur-sm">
-            <p className="text-sm font-medium text-red-800 dark:text-red-200">
-              {updateError || errors.submit}
-            </p>
+          <div className="relative mb-6 rounded-lg bg-red-50/50 p-4 dark:bg-red-900/30 border border-red-200/50 dark:border-red-800/50 backdrop-blur-sm transform hover:scale-[1.02] transition-all duration-300">
+            <div className="absolute inset-0 bg-red-500/5 dark:bg-red-400/5 rounded-lg animate-pulse"></div>
+            <div className="relative">
+              <p className="text-sm font-medium text-red-800 dark:text-red-200">
+                {updateError || errors.submit}
+              </p>
+            </div>
           </div>
         )}
 
         {/* Formulaire */}
-        <form onSubmit={handleSubmit} className="space-y-6 space-x-auto">
+        <form onSubmit={handleSubmit} className="space-y-8">
           {/* Photo de profil
           <div className="text-center mb-8" role="group" aria-labelledby="profile-photo-label">
             <span id="profile-photo-label" className="sr-only">Photo de profil</span>
@@ -414,16 +420,16 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
 
           {/* Tabs de navigation */}
           <Tab.Group>
-            <Tab.List className="flex space-x-1 rounded-lg bg-blue-900/20 p-1 mb-6 sticky top-0 z-10">
+            <Tab.List className="flex space-x-2 rounded-xl bg-white/50 dark:bg-gray-800/50 p-1.5 mb-8 sticky top-0 z-10 shadow-lg border border-gray-200/20 dark:border-gray-700/20 text-purple-500 backdrop-blur-md transition-all duration-300 hover:shadow-xl">
               <Tab as={Fragment}>
                 {({ selected }) => (
                   <button
-                    role="tab"
-                    className={`w-full rounded-md py-2 text-sm font-medium leading-5
-                      ${selected
-                        ? 'bg-white dark:bg-gray-800 text-blue-700 dark:text-blue-400 shadow'
-                        : 'text-gray-600 dark:text-gray-400 hover:bg-white/[0.12] hover:text-blue-600'
-                      } transition-all duration-200`}
+                   role="tab"
+                   className={`w-full rounded-lg py-2.5 text-sm font-medium leading-5
+                     ${selected
+                       ? 'bg-white dark:bg-gray-800 text-primary-600 dark:text-primary-400 shadow-lg transform scale-[1.02]'
+                       : 'text-gray-600 dark:text-gray-400 hover:bg-white/30 dark:hover:bg-gray-700/30 hover:text-primary-500'
+                     } transition-all duration-300`}
                   >
                     Profil
                   </button>
@@ -432,12 +438,12 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
               <Tab as={Fragment}>
                 {({ selected }) => (
                   <button
-                    role="tab"
-                    className={`w-full rounded-md py-2 text-sm font-medium leading-5
-                      ${selected
-                        ? 'bg-white dark:bg-gray-800 text-blue-700 dark:text-blue-400 shadow'
-                        : 'text-gray-600 dark:text-gray-400 hover:bg-white/[0.12] hover:text-blue-600'
-                      } transition-all duration-200`}
+                  role="tab"
+                  className={`w-full rounded-lg py-2.5 text-sm font-medium leading-5
+                    ${selected
+                      ? 'bg-white dark:bg-gray-800 text-primary-600 dark:text-primary-400 shadow-lg transform scale-[1.02]'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-white/30 dark:hover:bg-gray-700/30 hover:text-primary-500'
+                    } transition-all duration-300`}
                   >
                     Personnel
                   </button>
@@ -446,12 +452,12 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
               <Tab as={Fragment}>
                 {({ selected }) => (
                   <button
-                    role="tab"
-                    className={`w-full rounded-md py-2 text-sm font-medium leading-5
-                      ${selected
-                        ? 'bg-white dark:bg-gray-800 text-blue-700 dark:text-blue-400 shadow'
-                        : 'text-gray-600 dark:text-gray-400 hover:bg-white/[0.12] hover:text-blue-600'
-                      } transition-all duration-200`}
+                  role="tab"
+                  className={`w-full rounded-lg py-2.5 text-sm font-medium leading-5
+                    ${selected
+                      ? 'bg-white dark:bg-gray-800 text-primary-600 dark:text-primary-400 shadow-lg transform scale-[1.02]'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-white/30 dark:hover:bg-gray-700/30 hover:text-primary-500'
+                    } transition-all duration-300`}
                   >
                     Professionnel
                   </button>
@@ -459,13 +465,13 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
               </Tab>
             </Tab.List>
 
-            <Tab.Panels className="max-h-[60vh] overflow-y-auto pr-2">
+            <Tab.Panels className="max-h-[60vh] overflow-y-auto pr-2 space-y-8">
               {/* Panel Profil */}
               <Tab.Panel>
                 <div className="space-y-4">
                   {/* Nom d'utilisateur */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+                    <label className="block text-sm font-semibold bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">
                       Nom d&apos;utilisateur
                     </label>
                     <input
@@ -475,16 +481,18 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
                       onChange={handleChange}
                       disabled={isUpdateLoading}
                       className={`mt-1.5 block w-full rounded-lg border ${errors.username ? 'border-red-500' : 'border-gray-200/50 dark:border-gray-700/50'
-                        } bg-white/20 dark:bg-gray-800/30 px-4 py-3 text-gray-700 dark:text-gray-200 transition-all duration-300 focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed placeholder-gray-400 dark:placeholder-gray-500`}
+                        } bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm px-4 py-3 text-gray-700 dark:text-gray-200 transition-all duration-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed placeholder-gray-400 dark:placeholder-gray-500 hover:border-primary-500/50 dark:hover:border-primary-400/50`}
                     />
                     {errors.username && (
-                      <p className="mt-1 text-sm text-red-500">{errors.username}</p>
+                      <p className="mt-2 text-sm text-red-500 bg-red-50/30 dark:bg-red-900/20 px-3 py-1 rounded-md border border-red-100/50 dark:border-red-800/30">
+                        {errors.username}
+                      </p>
                     )}
                   </div>
 
                   {/* Email */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+                    <label className="block text-sm font-semibold bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">
                       Email
                     </label>
                     <div className="relative">
@@ -507,38 +515,61 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
                         </div>
                       )}
                       {errors.email && (
-                        <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                        <p className="mt-2 text-sm text-red-500 bg-red-50/30 dark:bg-red-900/20 px-3 py-1 rounded-md border border-red-100/50 dark:border-red-800/30">{errors.email}</p>
                       )}
                       {emailChangeError && (
-                        <p className="mt-1 text-sm text-red-500">{emailChangeError}</p>
+                        <p className="mt-2 text-sm text-red-500 bg-red-50/30 dark:bg-red-900/20 px-3 py-1 rounded-md border border-red-100/50 dark:border-red-800/30">{emailChangeError}</p>
                       )}
                       {emailChangeStatus === 'pending' && pendingEmail && (
-                        <p className="mt-1 text-sm text-blue-500">
-                          Un email de vérification a été envoyé à {pendingEmail}. Veuillez vérifier votre boîte de réception.
-                        </p>
+                        <div className="relative mt-2 rounded-lg bg-blue-50/30 dark:bg-blue-900/20 p-3 border border-blue-100/50 dark:border-blue-800/30 transform hover:scale-[1.02] transition-all duration-300">
+                          <div className="absolute inset-0 bg-blue-500/5 dark:bg-blue-400/5 rounded-lg animate-pulse"></div>
+                          <p className="relative text-sm text-blue-700 dark:text-blue-300">
+                            <span className="font-medium">Un email de vérification a été envoyé à </span>
+                            <span className="font-bold">{pendingEmail}</span>
+                            <span className="block mt-1 text-blue-600 dark:text-blue-400">Veuillez vérifier votre boîte de réception.</span>
+                          </p>
+                        </div>
                       )}
                       {emailChangeStatus === 'verified' && (
-                        <p className="mt-1 text-sm text-green-500">
-                          Votre email a été mis à jour avec succès !
-                        </p>
+                        <div className="relative mt-2 rounded-lg bg-green-50/30 dark:bg-green-900/20 p-3 border border-green-100/50 dark:border-green-800/30 transform hover:scale-[1.02] transition-all duration-300">
+                          <div className="absolute inset-0 bg-green-500/5 dark:bg-green-400/5 rounded-lg animate-pulse"></div>
+                          <p className="relative text-sm font-medium text-green-700 dark:text-green-300">
+                            <span className="flex items-center gap-2">
+                              <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                              </svg>
+                              Votre email a été mis à jour avec succès !
+                            </span>
+                          </p>
+                        </div>
                       )}
                     </div>
                   </div>
 
                   {/* Mot de passe */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-semibold bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">
                       Mot de passe (optionnel)
                     </label>
-                    <input
-                      type="password"
-                      name="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      disabled={isUpdateLoading}
-                      placeholder="Laissez vide pour ne pas changer"
-                      className="mt-1.5 block w-full rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-white/20 dark:bg-gray-800/30 px-4 py-3 text-gray-700 dark:text-gray-200 transition-all duration-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    />
+                    <div className="relative group">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg className="h-5 w-5 text-gray-400 group-hover:text-primary-500 transition-colors duration-200" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 116 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <input
+                        type="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        disabled={isUpdateLoading}
+                        placeholder="Laissez vide pour ne pas changer"
+                        className="pl-10 mt-1.5 block w-full rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-white/30 dark:bg-gray-800/30 px-4 py-3 text-gray-700 dark:text-gray-200 transition-all duration-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 hover:border-primary-500/50 dark:hover:border-primary-400/50 backdrop-blur-sm"
+                      />
+                    </div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 italic">
+                      Entrez un nouveau mot de passe uniquement si vous souhaitez le modifier
+                    </p>
                   </div>
                 </div>
               </Tab.Panel>
@@ -548,7 +579,7 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+                      <label className="block text-sm font-semibold bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">
                         Prénom
                       </label>
                       <input
@@ -557,12 +588,12 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
                         value={formData.firstName}
                         onChange={handleChange}
                         disabled={isUpdateLoading}
-                        className="mt-1.5 block w-full rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-white/20 dark:bg-gray-800/30 px-4 py-3 text-gray-700 dark:text-gray-200 transition-all duration-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="mt-1.5 block w-full rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-white/30 dark:bg-gray-800/30 px-4 py-3 text-gray-700 dark:text-gray-200 transition-all duration-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 hover:border-primary-500/50 dark:hover:border-primary-400/50 backdrop-blur-sm"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+                      <label className="block text-sm font-semibold bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">
                         Nom
                       </label>
                       <input
@@ -571,14 +602,14 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
                         value={formData.lastName}
                         onChange={handleChange}
                         disabled={isUpdateLoading}
-                        className="mt-1.5 block w-full rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-white/20 dark:bg-gray-800/30 px-4 py-3 text-gray-700 dark:text-gray-200 transition-all duration-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="mt-1.5 block w-full rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-white/30 dark:bg-gray-800/30 px-4 py-3 text-gray-700 dark:text-gray-200 transition-all duration-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 hover:border-primary-500/50 dark:hover:border-primary-400/50 backdrop-blur-sm"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+                      <label className="block text-sm font-semibold bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">
                         Date de naissance
                       </label>
                       <input
@@ -587,12 +618,12 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
                         value={formData.dateOfBirth}
                         onChange={handleChange}
                         disabled={isUpdateLoading}
-                        className="mt-1.5 block w-full rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-white/20 dark:bg-gray-800/30 px-4 py-3 text-gray-700 dark:text-gray-200 transition-all duration-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="mt-1.5 block w-full rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-white/30 dark:bg-gray-800/30 px-4 py-3 text-gray-700 dark:text-gray-200 transition-all duration-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 hover:border-primary-500/50 dark:hover:border-primary-400/50 backdrop-blur-sm"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+                      <label className="block text-sm font-semibold bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">
                         Genre
                       </label>
                       <select
@@ -600,7 +631,7 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
                         value={formData.gender}
                         onChange={handleChange}
                         disabled={isUpdateLoading}
-                        className="mt-1.5 block w-full rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-white/20 dark:bg-gray-800/30 px-4 py-3 text-gray-700 dark:text-gray-200 transition-all duration-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="mt-1.5 block w-full rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-white/30 dark:bg-gray-800/30 px-4 py-3 text-gray-700 dark:text-gray-200 transition-all duration-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 hover:border-primary-500/50 dark:hover:border-primary-400/50 backdrop-blur-sm"
                       >
                         <option value="non_specifie">Non spécifié</option>
                         <option value="homme">Homme</option>
@@ -611,7 +642,7 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+                    <label className="block text-sm font-semibold bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">
                       Description
                     </label>
                     <textarea
@@ -627,7 +658,7 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+                      <label className="block text-sm font-semibold bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">
                         Ville
                       </label>
                       <input
@@ -636,12 +667,12 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
                         value={formData.location.city}
                         onChange={handleChange}
                         disabled={isUpdateLoading}
-                        className="mt-1.5 block w-full rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-white/20 dark:bg-gray-800/30 px-4 py-3 text-gray-700 dark:text-gray-200 transition-all duration-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="mt-1.5 block w-full rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-white/30 dark:bg-gray-800/30 px-4 py-3 text-gray-700 dark:text-gray-200 transition-all duration-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 hover:border-primary-500/50 dark:hover:border-primary-400/50 backdrop-blur-sm"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+                      <label className="block text-sm font-semibold bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">
                         Pays
                       </label>
                       <input
@@ -650,7 +681,7 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
                         value={formData.location.country}
                         onChange={handleChange}
                         disabled={isUpdateLoading}
-                        className="mt-1.5 block w-full rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-white/20 dark:bg-gray-800/30 px-4 py-3 text-gray-700 dark:text-gray-200 transition-all duration-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="mt-1.5 block w-full rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-white/30 dark:bg-gray-800/30 px-4 py-3 text-gray-700 dark:text-gray-200 transition-all duration-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 hover:border-primary-500/50 dark:hover:border-primary-400/50 backdrop-blur-sm"
                       />
                     </div>
                   </div>
@@ -662,7 +693,7 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+                      <label className="block text-sm font-semibold bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">
                         Profession
                       </label>
                       <input
@@ -672,7 +703,7 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
                         onChange={handleChange}
                         disabled={isUpdateLoading}
                         placeholder="Ex: Développeur Web"
-                        className="mt-1.5 block w-full rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-white/20 dark:bg-gray-800/30 px-4 py-3 text-gray-700 dark:text-gray-200 transition-all duration-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="mt-1.5 block w-full rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-white/30 dark:bg-gray-800/30 px-4 py-3 text-gray-700 dark:text-gray-200 transition-all duration-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 hover:border-primary-500/50 dark:hover:border-primary-400/50 backdrop-blur-sm"
                       />
                     </div>
 
@@ -683,19 +714,62 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
           </Tab.Group>
 
           {/* Boutons d'action */}
-          <div className="mt-8 flex flex-col-reverse sm:flex-row justify-end gap-3 sticky bottom-0 pt-4">
+          <div className="relative mt-8 flex flex-col-reverse sm:flex-row justify-end gap-3 bottom-0 pt-4 before:absolute before:inset-0 before:bg-gradient-to-t before:from-white/80 before:to-transparent dark:before:from-gray-900/80 before:-top-20 before:pointer-events-none">
+            <div className="relative flex flex-col-reverse sm:flex-row justify-end gap-3 w-full">
             <button
               type="button"
               onClick={handleClose}
               disabled={isUpdateLoading}
-              className="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-white/20 dark:bg-gray-800/30 border border-gray-200/50 dark:border-gray-700/50 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:border-gray-300 dark:hover:border-gray-600 active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-400"
+              onMouseDown={(e) => {
+                const button = e.currentTarget;
+                const circle = document.createElement("span");
+                const diameter = Math.max(button.clientWidth, button.clientHeight);
+                const radius = diameter / 2;
+
+                circle.style.width = circle.style.height = `${diameter}px`;
+                circle.style.left = `${e.clientX - button.offsetLeft - radius}px`;
+                circle.style.top = `${e.clientY - button.offsetTop - radius}px`;
+                circle.classList.add("absolute", "rounded-full", "bg-gray-400/20", "animate-ripple", "pointer-events-none");
+
+                const oldRipples = button.getElementsByClassName("animate-ripple");
+                Array.from(oldRipples).forEach(ripple => ripple.remove());
+
+                button.appendChild(circle);
+
+                setTimeout(() => {
+                  circle.remove();
+                }, 600);
+              }}
+              className="group relative overflow-hidden w-full sm:w-auto px-5 py-2.5 rounded-lg bg-white/30 dark:bg-gray-800/30 border border-gray-200/50 dark:border-gray-700/50 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-gray-700/50 hover:border-primary-500/30 dark:hover:border-primary-400/30 active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-primary-400 backdrop-blur-sm"
             >
               Annuler
             </button>
             <button
               type="submit"
               disabled={isUpdateLoading || isSubmitting}
-              className="w-full sm:w-auto px-6 py-2.5 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-sm font-semibold text-white hover:from-blue-600 hover:to-blue-700 active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/25"
+              onMouseDown={(e) => {
+                const button = e.currentTarget;
+                const circle = document.createElement("span");
+                const diameter = Math.max(button.clientWidth, button.clientHeight);
+                const radius = diameter / 2;
+
+                circle.style.width = circle.style.height = `${diameter}px`;
+                circle.style.left = `${e.clientX - button.offsetLeft - radius}px`;
+                circle.style.top = `${e.clientY - button.offsetTop - radius}px`;
+                circle.classList.add("absolute", "rounded-full", "bg-white/30", "animate-ripple", "pointer-events-none");
+
+                // Nettoyer les anciens effets ripple
+                const oldRipples = button.getElementsByClassName("animate-ripple");
+                Array.from(oldRipples).forEach(ripple => ripple.remove());
+
+                button.appendChild(circle);
+
+                // Nettoyer l'effet après l'animation
+                setTimeout(() => {
+                  circle.remove();
+                }, 600);
+              }}
+              className="group w-full sm:w-auto px-6 py-2.5 rounded-lg bg-gradient-to-r from-primary-500 to-primary-600 text-sm font-semibold text-white relative overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl shadow-primary-500/25 backdrop-blur-sm before:absolute before:inset-0 before:bg-primary-400/0 hover:before:bg-primary-400/20 before:transition-colors before:duration-300 after:absolute after:inset-0 after:-z-10 after:bg-gradient-to-r after:from-primary-600/0 after:to-primary-400/0 hover:after:from-primary-600/20 hover:after:to-primary-400/20 after:transition-colors after:duration-500"
               aria-busy={isUpdateLoading || isSubmitting}
             >
               {isUpdateLoading || isSubmitting ? (
@@ -704,13 +778,18 @@ const ProfileUpdateModal = ({ isOpen, onClose }) => {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                   </svg>
-                  Enregistrement...
+                  <span className="animate-pulse">Enregistrement...</span>
                 </span>
               ) : (
-                'Sauvegarder'
+                <span className="flex items-center gap-2 group-hover:translate-x-1 group-hover:text-lime-500 transition-all duration-300">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 9l-7 7-7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Sauvegarder
+                </span>
               )}
             </button>
-            
+          </div>
           </div>
         </form>
       </div>

@@ -46,7 +46,13 @@ Le serveur utilise Express.js avec les configurations suivantes :
 | POST | /logout | Déconnexion | Non |
 | GET | /users/profile | Obtenir le profil | Oui |
 | PUT | /users/update-profile | Mettre à jour le profil | Oui |
-| PUT | /users/update-avatar | Mettre à jour l'avatar | Oui | //Developpement
+| PUT | /users/update-avatar | Mettre à jour l'avatar | Oui |
+| GET | /users/stats | Obtenir les statistiques utilisateur | Oui |
+| PUT | /users/status | Mettre à jour le statut utilisateur | Oui |
+| GET | /users/tasks | Obtenir les tâches de l'utilisateur | Oui |
+| PUT | /users/tasks/:taskId | Mettre à jour une tâche utilisateur | Oui |
+| POST | /email-change | Initier le changement d'email | Oui |
+| GET | /verify-email | Vérifier la mise à jour d'email | Non |
 
 ### Tâches (/tasks)
 | Méthode | Endpoint | Description | Authentification |
@@ -59,6 +65,18 @@ Le serveur utilise Express.js avec les configurations suivantes :
 | GET | /owner/:id/category/:category | Filtrer par catégorie | Oui |
 
 ## Modèles de Données
+
+### Utilisateur Temporaire (TmpUser)
+```javascript
+{
+  name: String,           // Requis
+  email: String,         // Requis, unique
+  password: String,      // Requis, hashé
+  active: Boolean,       // État d'activation
+  token: String,        // Token de validation
+  createdAt: Date       // Date de création avec expiration (1h)
+}
+```
 
 ### Utilisateur (User)
 ```javascript
@@ -90,7 +108,33 @@ Le serveur utilise Express.js avec les configurations suivantes :
 }
 ```
 
-## Middleware et Sécurité
+## Middlewares et Sécurité
+
+### Middleware d'Authentification
+Le middleware `authenticate.js` assure :
+- La validation des tokens JWT
+- La vérification de l'expiration des tokens
+- L'injection des données utilisateur dans la requête
+- La gestion des erreurs d'authentification
+
+### Middleware d'Upload
+Le middleware `upload.js` gère :
+- La validation des types de fichiers (images uniquement)
+- La limitation de taille (max 5MB)
+- La génération de noms de fichiers sécurisés
+- Le stockage organisé des fichiers
+
+### Middleware de Validation
+Validation des données entrantes avec :
+- Vérification des champs requis
+- Validation des formats (email, dates, etc.)
+- Protection contre les injections
+
+### Middleware de Rate Limiting
+Protection contre les abus avec :
+- Limitation du nombre de requêtes par IP
+- Fenêtres de temps configurables
+- Blocage temporaire après trop de tentatives
 
 ### authenticate.js
 Middleware d'authentification qui :
@@ -104,6 +148,19 @@ Middleware de gestion des uploads qui :
 - Limite la taille des fichiers
 - Génère des noms de fichiers sécurisés
 
+## Services et Repositories
+
+### Repositories
+Implémentation du pattern Repository pour la séparation des responsabilités :
+- `user.repo.js` : Gestion des opérations CRUD utilisateur
+- `task.repo.js` : Gestion des opérations CRUD tâches
+- `tmp.user.repo.js` : Gestion des utilisateurs temporaires
+
+### Services Métier
+- `auth.service.js` : Logique d'authentification et gestion des tokens
+- `task.service.js` : Logique de gestion des tâches
+- `user.service.js` : Gestion du profil et des statistiques
+
 ## Service d'Emails
 
 ### Configuration
@@ -113,10 +170,10 @@ Utilise Mailjet comme service d'envoi avec :
 - Files d'attente pour les envois massifs
 
 ### Templates Disponibles
-- Vérification d'email
-- Réinitialisation de mot de passe
-- Email de bienvenue
-- Notifications de tâches
+- Vérification d'email (emailVerification.handlebars)
+- Demande de réinitialisation du mot de passe (requestresetPassword.handlebars)
+- Réinitialisation du mot de passe (resetPassword.handlebars)
+- Email de bienvenue (welcome.handlebars)
 
 ### Exemple d'Utilisation
 ```javascript
@@ -138,6 +195,9 @@ await sendEmail(
 - Tokens JWT avec expiration
 - Protection contre les injections NoSQL
 - Limitation de débit sur les routes sensibles
+- Validation des emails avec tokens temporaires
+- Système d'utilisateurs temporaires pour l'inscription
+- Vérification des droits d'accès aux ressources
 
 ### Performance
 - Indexation MongoDB optimisée

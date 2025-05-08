@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+Taskmanager_Frontend/node_modules/
+Taskmanager_Backend/node_modules/
+
+# Build files
+Taskmanager_Frontend/build/
+Taskmanager_Frontend/dist/
+Taskmanager_Backend/dist/
+
+# Log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE specific files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Coverage directory
+coverage/
+Taskmanager_Frontend/coverage/
+Taskmanager_Backend/coverage/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Project specific files
+Rapport/

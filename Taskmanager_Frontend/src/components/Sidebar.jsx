@@ -1,5 +1,8 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAllTasks } from '../redux/slices/taskSlice';
+import { selectUser } from '../redux/slices/authSlice';
 import {
   selectAvailableCategories,
   selectCurrentCategory,
@@ -18,8 +21,12 @@ import {
 } from 'react-icons/hi2';
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+  const user = useSelector(selectUser);
   const tasks = useSelector(selectAllTasks);
   const categories = useSelector(selectAvailableCategories);
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
+  const [authChecked, setAuthChecked] = useState(false);
   const currentCategory = useSelector(selectCurrentCategory);
   const dispatch = useDispatch();
 
@@ -52,7 +59,7 @@ const Sidebar = () => {
   // Formater la date
   const formatDate = (date) => {
     if (!date) return '';
-    const options = { 
+    const options = {
       day: '2-digit',
       month: 'short',
       hour: '2-digit',
@@ -60,6 +67,36 @@ const Sidebar = () => {
     };
     return new Date(date).toLocaleDateString('fr-FR', options);
   };
+
+
+  useEffect(() => {
+    let mounted = true;
+
+    const checkAuth = async () => {
+      if (!user || !user._id) {
+        if (window.location.pathname !== '/login') {
+          navigate('/login', { replace: true });
+        }
+      }
+      if (mounted) {
+        setAuthChecked(true);
+        setIsAuthChecking(false);
+      }
+    };
+
+    checkAuth();
+    return () => { mounted = false; };
+  }, [user, navigate]);
+  // Afficher un loader pendant la vérification
+  if (!authChecked || isAuthChecking) {
+    return (
+      <div className="backdrop-filter backdrop-blur-md bg-white/20 dark:bg-gray-800/30 rounded-xl shadow-lg border border-white/20 p-4 m-2">
+        <p className="text-gray-700 dark:text-gray-200 text-center">
+          Vérification de l&apos;authentification...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="backdrop-filter backdrop-blur-md bg-white/20 dark:bg-gray-800/30 rounded-xl shadow-lg border border-white/20 p-4 lg:p-3 xl:p-4 transition-all duration-300 hover:shadow-xl  motion-safe:hover:scale-[1.02] z-10 relative  mx-2 my-16 md:mb-4 lg:mx-4">
@@ -82,20 +119,20 @@ const Sidebar = () => {
         </div>
 
         <div className="h-px bg-gray-200 dark:bg-gray-700" />
-        
+
         {/* Stats Section */}
         <div className="bg-white/30 dark:bg-gray-700/30 p-3 lg:p-2.5 xl:p-3 rounded-lg hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all">
           <div className="flex items-center gap-2 mb-2">
             <HiOutlineChartBarSquare className="w-5 h-5 text-gray-700 dark:text-gray-200" />
             <h3 className="font-medium text-gray-700 dark:text-gray-200">Statistiques</h3>
           </div>
-          <div className="grid grid-cols-3 lg:grid-cols-1 xl:grid-cols-3 gap-2">
+          <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2">
             <div className="bg-blue-500/20 p-3 lg:p-2.5 xl:p-3 rounded-md flex-1 hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all">
               <div className="flex items-center gap-2">
                 <HiOutlineChartBar className="w-4 h-4 text-gray-600 dark:text-gray-300" />
                 <p className="text-sm text-gray-600 dark:text-gray-300">Total</p>
               </div>
-              <p className="font-bold text-gray-800 dark:text-white mt-1">{totalTasks}</p>
+              <p className="justify-items-end font-bold text-gray-800 dark:text-white mt-1">{totalTasks}</p>
             </div>
             <div className="bg-green-500/20 p-3 lg:p-2.5 xl:p-3 rounded-md flex-1 hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all">
               <div className="flex items-center gap-2">
@@ -113,7 +150,7 @@ const Sidebar = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Section Catégories */}
         <div className="bg-white/30 dark:bg-gray-700/30 p-3 rounded-lg hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all ">
           <div className="flex items-center gap-2 mb-2">
@@ -121,13 +158,12 @@ const Sidebar = () => {
             <h3 className="font-medium text-gray-700 dark:text-gray-200">Catégories</h3>
           </div>
           <ul className="space-y-1 grid grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 gap-2">
-            <li 
+            <li
               onClick={() => dispatch(setCurrentCategory('All'))}
-              className={`flex items-center justify-between p-2 rounded-md cursor-pointer transition-colors ${
-                currentCategory === 'All'
-                  ? 'bg-white/40 dark:bg-gray-600/40' 
+              className={`flex items-center justify-between p-2 rounded-md cursor-pointer transition-colors ${currentCategory === 'All'
+                  ? 'bg-white/40 dark:bg-gray-600/40'
                   : 'hover:bg-white/30 dark:hover:bg-gray-600/30'
-              }`}
+                }`}
             >
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 rounded-full bg-gray-500/20 flex items-center justify-center">
@@ -140,14 +176,13 @@ const Sidebar = () => {
               </span>
             </li>
             {categories.map((category, index) => (
-              <li 
+              <li
                 key={category}
                 onClick={() => dispatch(setCurrentCategory(category))}
-                className={`group flex items-center justify-between p-2 rounded-md cursor-pointer transition-all duration-300 ${
-                  currentCategory === category
-                    ? 'bg-white/40 dark:bg-gray-600/40' 
+                className={`group flex items-center justify-between p-2 rounded-md cursor-pointer transition-all duration-300 ${currentCategory === category
+                    ? 'bg-white/40 dark:bg-gray-600/40'
                     : 'hover:bg-white/30 dark:hover:bg-gray-600/30'
-                }`}
+                  }`}
               >
                 <div className="flex items-center gap-2">
                   <div className={`w-6 h-6 rounded-full ${getCategoryColor(category, index).bg} flex items-center justify-center transition-all duration-300 group-hover:ring-2 ring-offset-2 ring-offset-white/20 dark:ring-offset-gray-800/30 ${getCategoryColor(category, index).text.replace('text-', 'ring-')}`}>
@@ -162,14 +197,14 @@ const Sidebar = () => {
             ))}
           </ul>
         </div>
-        
+
         {/* Activité Récente */}
         <div className="bg-white/30 dark:bg-gray-700/30 p-3 rounded-lg hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all">
           <div className="flex items-center gap-2 mb-2">
             <HiOutlineChartBarSquare className="w-5 h-5 text-gray-700 dark:text-gray-200" />
             <h3 className="font-medium text-gray-700 dark:text-gray-200">Activité Récente</h3>
           </div>
-          <div className="space-y-2 max-h-32 overflow-y-auto">
+          <div className="space-y-2 max-h-50 overflow-y-auto">
             {tasks.slice(0, 3).map((task) => (
               <div key={task._id} className="text-xs p-2 bg-white/30 dark:bg-gray-600/30 rounded-md">
                 <div className="flex flex-col space-y-1">
@@ -188,11 +223,10 @@ const Sidebar = () => {
                         {formatDate(task.dueDate)}
                       </span>
                     )}
-                    <span className={`text-xs px-1.5 py-0.5 rounded ${
-                      task.status === 'done' 
-                        ? 'bg-green-500/20 text-green-700 dark:text-green-300' 
+                    <span className={`text-xs px-1.5 py-0.5 rounded ${task.status === 'done'
+                        ? 'bg-green-500/20 text-green-700 dark:text-green-300'
                         : 'bg-yellow-500/20 text-yellow-700 dark:text-yellow-300'
-                    }`}>
+                      }`}>
                       <span className="flex items-center gap-1">
                         {task.status === 'done' ? (
                           <>

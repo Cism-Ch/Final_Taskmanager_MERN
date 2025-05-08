@@ -12,7 +12,7 @@ const taskSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'done'],
+        enum: ['pending', 'done', 'deleted'],
         default: 'pending',
     },
     category: {

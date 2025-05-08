@@ -2,36 +2,46 @@ import { useSelector } from 'react-redux';
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { selectTaskStats } from '../../redux/selectors/profileSelectors';
-import { FaClipboardList, FaHourglass, FaTrash, FaStar, FaCheckCircle } from 'react-icons/fa';
+import {
+  MdAssignment,
+  MdPendingActions,
+  MdDeleteForever,
+  MdStarRate,
+  MdTaskAlt
+} from 'react-icons/md';
 
 const StatCard = ({ title, value, icon, description }) => (
   <div
-    className="flex items-center w-full bg-white/50 dark:bg-gray-900/60 rounded-full shadow-lg py-3 px-4 hover:bg-white/10 dark:hover:bg-gray-900/50 transition-all duration-300 backdrop-blur-sm hover:shadow-xl motion-safe:hover:scale-[1.02]"
+    className="bg-white dark:bg-gray-900/70 rounded-xl shadow-lg p-8 transition-all duration-300 hover:shadow-xl hover:scale-[1.02] border border-gray-100 dark:border-gray-800"
     role="article"
     aria-label={`Statistique: ${title}`}
   >
-    <span
-      className="text-xl text-primary-500 dark:text-primary-400 mr-3"
-      role="img"
-      aria-label={`Icône ${title}`}
-    >
-      {icon}
-    </span>
-    <div className="flex flex-grow justify-between items-center">
-      <div className="flex items-center gap-2">
+    <div className="relative mb-6">
+      <div className="absolute inset-0 bg-primary-500/10 dark:bg-primary-400/10 rounded-full scale-150 animate-pulse"></div>
+      <div className="relative w-16 h-16 flex items-center justify-center rounded-full bg-gradient-to-br from-primary-100 to-white dark:from-primary-900 dark:to-primary-800 shadow-lg transform hover:scale-110 transition-all duration-300">
         <span
-          className="text-xl font-bold text-gray-200 dark:text-white"
-          aria-label={`${value} ${title}`}
+          className="text-primary-600 dark:text-primary-300"
+          role="img"
+          aria-label={`Icône ${title}`}
         >
-          {value}
+          {icon}
         </span>
-        <h4 className="text-md font-medium text-gray-300 dark:text-gray-300">
-          {title}
-        </h4>
       </div>
+    </div>
+    
+    <div>
+      <span
+        className="block text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-gray-600 to-gray-300 dark:from-black-400 dark:to-black-300 mb-4"
+        aria-label={`${value} ${title}`}
+      >
+        {value}
+      </span>
+      <h4 className="text-base font-medium text-gray-600 dark:text-gray-300 mb-2">
+        {title}
+      </h4>
       {description && (
         <p
-          className="text-sm text-gray-200 dark:text-gray-400 ml-auto"
+          className="text-sm text-gray-500 dark:text-gray-400"
           aria-label={description}
         >
           {description}
@@ -51,62 +61,50 @@ StatCard.propTypes = {
 const ProfileStats = () => {
   const stats = useSelector(selectTaskStats);
   
-  console.group('ProfileStats - Debug');
-  console.log('Stats reçues:', stats);
-  console.log('Détail des stats:', {
-    total: stats?.total,
-    deleted: stats?.deleted,
-    completed: stats?.completed,
-    important: stats?.important
-  });
-  console.groupEnd();
-  
   const statCards = useMemo(() => [
     {
       title: "Total des tâches",
       value: stats?.total || 0,
-      icon: <FaClipboardList />,
+      icon: <MdAssignment className="text-2xl" />,
       description: "Nombre total de tâches"
     },
     {
       title: "Tâches en attente",
       value: stats?.pending || 0,
-      icon: <FaHourglass />,
+      icon: <MdPendingActions className="text-2xl" />,
       description: "Tâches en cours de traitement"
     },
     {
       title: "Tâches supprimées",
       value: stats?.deleted || 0,
-      icon: <FaTrash />,
+      icon: <MdDeleteForever className="text-2xl" />,
       description: "Tâches supprimées jusqu'à présent"
     },
     {
       title: "Tâches importantes",
       value: stats?.important || 0,
-      icon: <FaStar />,
+      icon: <MdStarRate className="text-2xl" />,
       description: "Tâches marquées comme importantes"
     },
     {
       title: "Tâches terminées",
       value: stats?.completed || 0,
-      icon: <FaCheckCircle />,
+      icon: <MdTaskAlt className="text-2xl" />,
       description: "Tâches complétées avec succès"
     }
   ], [stats?.total, stats?.pending, stats?.deleted, stats?.important, stats?.completed]);
 
   return (
-    <section
-      className="m-12 p-6 rounded-xl"
-      role="region"
-      aria-label="Statistiques utilisateur"
-    >
-      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-        Statistiques
-      </h3>
-      <div className="flex flex-col gap-3">
-        {statCards.map((stat) => (
-          <StatCard key={stat.title} {...stat} />
-        ))}
+    <section className="py-6" role="region" aria-label="Statistiques utilisateur">
+      <div className="container mx-auto px-4">
+        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          Statistiques
+        </h3>
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5">
+          {statCards.map((stat) => (
+            <StatCard key={stat.title} {...stat} />
+          ))}
+        </div>
       </div>
     </section>
   );

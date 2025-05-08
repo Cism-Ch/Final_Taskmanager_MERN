@@ -5,7 +5,7 @@ import {
   selectAvailableCategories,
   DEFAULT_CATEGORIES
 } from '../redux/slices/categorySlice';
-import { toast } from 'react-toastify';
+import { notifications } from '../services/notifications';
 import PropTypes from 'prop-types';
 import {
   HiOutlinePlusCircle,
@@ -70,9 +70,33 @@ const TodoCreate = ({ isOpen = false, onClose }) => {
     });
   };
 
+  const validateForm = () => {
+    if (!formData.title.trim()) {
+      notifications.error('Le titre est requis');
+      return false;
+    }
+    
+    if (formData.title.trim().length < 3) {
+      notifications.error('Le titre doit contenir au moins 3 caractères');
+      return false;
+    }
+
+    if (formData.description.trim().length > 500) {
+      notifications.error('La description ne doit pas dépasser 500 caractères');
+      return false;
+    }
+
+    if (formData.dueDate && new Date(formData.dueDate) < new Date()) {
+      notifications.error('La date d\'échéance ne peut pas être dans le passé');
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.title.trim()) return;
+    if (!validateForm()) return;
 
     const taskData = {
       title: formData.title.trim(),
@@ -86,12 +110,14 @@ const TodoCreate = ({ isOpen = false, onClose }) => {
     try {
       setIsLoading(true);
       await dispatch(postTask(taskData)).unwrap();
-      toast.success('Tâche créée avec succès');
+      notifications.success('Tâche créée avec succès');
       resetForm();
       setIsDropdownOpen(false);
       onClose?.();
     } catch (error) {
-      toast.error('Erreur lors de la création de la tâche');
+      notifications.error(error.message || 'Erreur lors de la création de la tâche');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -107,18 +133,18 @@ const TodoCreate = ({ isOpen = false, onClose }) => {
           text-gray-700 dark:text-gray-200 font-medium rounded-lg
           transform transition-all duration-300 ease-in-out
           hover:shadow-lg motion-safe:hover:scale-[1.02]
-          focus:outline-none focus:ring-2 focus:ring-blue-500/50
+          focus:outline-none focus:ring-2 focus:ring-orange-500/50
           disabled:opacity-50 disabled:cursor-not-allowed
-          flex items-center justify-center gap-2"
+          flex items-center justify-center gap-2 "
       >
         <HiOutlinePlusCircle className="w-5 h-5" />
         <span>Nouvelle tâche</span>
       </button>
 
       {isDropdownOpen && (
-        <div className="absolute top-full left-0 right-0 mt-2 z-50 transform transition-all duration-300 ease-in-out">
+        <div className="absolute top-full left-0 right-0 mt-2 z-1 transform transition-all duration-300 ease-in-out">
           <form onSubmit={handleSubmit}
-            className="backdrop-filter backdrop-blur-lg bg-white/90 dark:bg-black/90 border border-white/20 rounded-xl shadow-lg p-6">
+            className="backdrop-filter backdrop-blur-sm bg-white/90 dark:bg-black/90 border border-white/20 rounded-xl shadow-lg py-8 px-2">
             <div className="space-y-4">
               {/* Titre */}
               <div className="relative">
@@ -207,18 +233,18 @@ const TodoCreate = ({ isOpen = false, onClose }) => {
               <div className="flex gap-4">
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-blue-500/80 hover:bg-blue-600/80
+                  className="flex-1 px-4 py-2 bg-teal-500/80 hover:bg-teal-600/80
                     text-white font-medium rounded-lg shadow-md
                     transform transition-all duration-300 ease-in-out
                     hover:shadow-lg motion-safe:hover:scale-[1.02]
-                    focus:outline-none focus:ring-2 focus:ring-blue-500/50
+                    focus:outline-none focus:ring-2 focus:ring-teal-500/50
                     disabled:opacity-50 disabled:cursor-not-allowed
                     inline-flex items-center justify-center gap-2"
                   disabled={!formData.title.trim() || isLoading}
                 >
                   {isLoading ? (
                     <>
-                      <HiOutlineArrowPath className="w-5 h-5 animate-spin" />
+                      <HiOutlineArrowPath className="w-5 h-5 animate-spin transition-all duration-300" />
                       <span>Création...</span>
                     </>
                   ) : (

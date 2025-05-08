@@ -2,7 +2,7 @@ import { memo } from 'react';
 import PropTypes from 'prop-types';
 import {
   HiOutlineBars3BottomLeft,
-  HiOutlineBars3Bottom,
+  HiOutlineDocumentArrowDown ,
   HiOutlineCalendarDays,
   HiOutlineClock,
   HiOutlineArrowPath
@@ -48,7 +48,7 @@ const SortingOptions = memo(({
               <option value="desc">A à Z</option>
               <option value="asc">Z à A</option>
             </select>
-            <HiOutlineBars3Bottom className="absolute right-2 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+            <HiOutlineDocumentArrowDown  className="absolute right-2 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
           </div>
         </div>
 

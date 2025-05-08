@@ -64,9 +64,9 @@ const TodoList = ({ tasks = [] }) => {
   }
 
   return (
-    <div className=" m-12 p-8 rounded-xl bg-white dark:bg-black/50 backdrop-blur-sm overflow-auto max-h-screen">
-      <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-4 px-6 pt-6">
-        <div className="transition-all duration-300 ease-in-out transform hover:scale-102">
+    <div className="sm:m-2 md:m-12 sm:pb-40 xs:p-2 sm:p-4 md:p-8 md:pb-60 rounded-xl border border-orange-500/80 bg-white dark:bg-black/50 backdrop-blur-lg overflow-auto max-h-screen">
+      <div className="relative z-10 grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 xs:px-4 sm:px-4 md:px-6 lg:px-7 xl:px-6 md:pt-1 pt-6 mx-2">
+        <div className="transition-all duration-300 ease-in-out transform hover:scale-102 ">
           <TodoCreate isOpen={false} />
         </div>
         {taskToEdit && (

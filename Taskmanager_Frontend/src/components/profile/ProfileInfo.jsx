@@ -142,13 +142,16 @@ const ProfileInfo = () => {
       )}
       
       {/* Vertical Card Stack */}
-      <div className="flex flex-col space-y-5">
+      <div className="flex flex-col space-y-6 p-2">
         {/* Card 1: Informations personnelles */}
-        <div className="bg-white/10 dark:bg-gray-900/80 backdrop-blur-md rounded-xl p-4 sm:p-5 border border-gray-200/60 dark:border-slate-500/30 shadow-md transition-all duration-300 w-full hover:shadow-xl motion-safe:hover:scale-[1.02]">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 pb-2 border-b border-gray-200/60 dark:border-gray-100/40 flex items-center gap-2">
-            <span className="inline-block w-1.5 h-6 bg-blue-500 rounded-full mr-1.5"></span>
-            Informations personnelles
-          </h3>
+        <div className="relative overflow-hidden bg-gradient-to-br from-white/20 to-white/5 dark:from-gray-800/40 dark:to-gray-900/60 backdrop-blur-md rounded-xl p-6 border border-gray-200/60 dark:border-gray-700/30 shadow-lg transition-all duration-300 w-full hover:shadow-xl transform hover:scale-[1.02]">
+          <div className="absolute top-0 right-0 w-40 h-40 bg-primary-500/10 dark:bg-primary-400/10 rounded-full -translate-y-20 translate-x-20"></div>
+          <div className="relative">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 pb-2 border-b border-gray-200/60 dark:border-gray-700/40 flex items-center gap-2">
+              <span className="inline-block w-1.5 h-6 bg-gradient-to-b from-primary-500 to-primary-600 rounded-full mr-1.5"></span>
+              Informations personnelles
+            </h3>
+          </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             {basicInfos.map(({ label, value }) => (
@@ -175,13 +178,13 @@ const ProfileInfo = () => {
             Informations détaillées
           </h3>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 relative z-10">
             {detailedInfos.map(({ label, value }) => (
-              <div key={label} className="group">
-                <dt className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-0.5">
+              <div key={label} className="group relative transform transition-all duration-300 hover:z-10">
+                <dt className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">
                   {label}
                 </dt>
-                <dd className="text-sm font-semibold text-gray-800 dark:text-gray-200 break-words bg-white/20 dark:bg-gray-800/30 p-2 rounded-md group-hover:bg-white/30 dark:group-hover:bg-gray-800/40 transition-colors duration-200">
+                <dd className="text-sm font-semibold text-gray-800 dark:text-gray-200 break-words bg-black/5 dark:bg-white/5 p-3 rounded-lg shadow-sm group-hover:shadow-md group-hover:bg-black/10 dark:group-hover:bg-white/10 transform group-hover:-translate-y-1 transition-all duration-300 border border-gray-200/20 dark:border-gray-700/30 hover:border-primary-500/30 dark:hover:border-primary-400/30">
                   {isLoading ? (
                     <Skeleton className="w-24 h-5" />
                   ) : (

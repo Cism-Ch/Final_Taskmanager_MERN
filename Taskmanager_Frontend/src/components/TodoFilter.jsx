@@ -12,7 +12,7 @@ import {
   HiOutlineCalendarDays,
   HiOutlineArrowsUpDown,
   HiOutlineFunnel,
-  HiOutlineTag
+  HiOutlineTag,
 } from 'react-icons/hi2';
 
 /**
@@ -84,13 +84,12 @@ const TodoFilter = () => {
     <>
       {/* Overlay de fond pour mobile */}
       <div
-        className={`fixed inset-0 bg-black/0 backdrop-blur-sm sm:mx-auto w-80 transition-opacity duration-300 lg:hidden ${
-          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
+        className={`fixed inset-0 bg-gray-900/30 backdrop-blur-sm w-screen h-screen transition-opacity duration-300 lg:hidden ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`}
         onClick={() => setIsOpen(false)}
         aria-hidden="true"
       />
-      
+
       {/* Bouton toggle pour mobile */}
       <button
         className="fixed right-4 top-4 z-50 lg:hidden rounded-full bg-white/20 p-2 backdrop-blur-md border border-white/20 hover:bg-white/30 active:scale-95 transform transition-all duration-200"
@@ -103,16 +102,22 @@ const TodoFilter = () => {
       </button>
 
       <section
-        className={`fixed right-0 top-0 h-screen w-72 mx-auto sm:w-65 transform transition-all duration-300 ease-in-out ${
-          isOpen ? 'translate-x-0 shadow-2xl' : 'translate-x-full'
-        } lg:relative lg:transform-none lg:translate-x-0 lg:h-auto ${
-          isLoading ? 'opacity-75' : ''
-        }`}
+        className={`fixed inset-0 px-auto transform transition-all duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'
+          } lg:relative lg:transform-none lg:translate-x-0 lg:h-auto ${isLoading ? 'opacity-75' : ''
+          }`}
         aria-hidden={!isOpen && window.innerWidth < 1080}
       >
-        <div className="backdrop-filter backdrop-blur-md bg-white/20 dark:bg-gray-800/30 rounded-xl shadow-lg border border-white/20 p-4 transition-all duration-300 hover:shadow-xl z-10 relative mt-16 mx-2 lg:mx-auto motion-safe:hover:scale-[1.02]">
-          <div className="space-y-20">
-            
+        <div className="backdrop-filter backdrop-blur-md bg-white/20 dark:bg-gray-800/30 rounded-xl border border-white/20  transition-all duration-300 z-10 py-4 relative mt-10 md:mt-16 m-4 px-4 motion-safe:hover:scale-[1.02] min-w-[200px] max-w-[700px] lg:max-w-[700px] h-[calc(100%-5rem)] md:h-[calc(100%-8rem)] overflow-y-auto">
+          <div className="space-y-10">
+
+            <div className="text-center mt-10">
+              <div className="flex items-center gap-2 justify-center">
+                <HiOutlineFunnel className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Filtrage des Taches</h2>
+              </div>
+              
+            </div>
+
             <div className="bg-white/30 dark:bg-gray-700/40 p-3 rounded-lg hover:shadow-xl motion-safe:hover:scale-[1.02] transition-all">
               <div className="flex items-center gap-2 mb-4">
                 <HiOutlineFunnel className="w-5 h-5 text-gray-700 dark:text-gray-200" />

@@ -35,7 +35,7 @@ const Home = () => {
   const toggleFilter = () => setFilterOpen(!filterOpen);
    
   return(
-    <div className="min-h-screen bg-gray-300 dark:bg-black dark:bg-[url('./assets/images/bg-dark02.jpg')] bg-cover bg-no-repeat">
+    <div className="container-full min-h-screen bg-gray-300 dark:bg-black dark:bg-[url('./assets/images/bg-dark02.jpg')] bg-cover bg-no-repeat">
       {/* Overlay gradients */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-transparent"></div>
 
@@ -80,7 +80,7 @@ const Home = () => {
         {/* Overlay mobile avec fermeture au clic et animation */}
         {(sidebarOpen || filterOpen) && (
           <div
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm lg:hidden z-30 opacity-0 animate-fadeIn"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm lg:hidden z-30 opacity-0 animate-fadeIn "
             onClick={() => {
               setSidebarOpen(false);
               setFilterOpen(false);
@@ -93,7 +93,7 @@ const Home = () => {
         {/* Sidebar - Mobile order: 2 */}
     
           <aside
-            className={`fixed inset-y-0 left-0 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:row-start-1 lg:col-start-1 lg:translate-x-0 transition-all duration-300 ease-out bg-gradient-to-r via-black/10 from-black/60 to-transparent z-40 w-3/5 lg:w-auto overflow-y-auto `}
+            className={`fixed inset-y-0 left-0 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:row-start-1 lg:col-start-1 lg:translate-x-0 transition-all duration-300 ease-out bg-gradient-to-r via-black/10 from-black/60 to-transparent z-40 w-screen lg:w-auto overflow-y-auto `}
           >
             <Sidebar />
           </aside>
@@ -124,17 +124,16 @@ const Home = () => {
         {/* TodoFilter - Mobile order: 3 */}
 
           <aside
-            className={`fixed inset-y-0 right-0 transform ${filterOpen ? 'translate-x-0' : 'translate-x-full'} lg:relative lg:row-start-1 lg:col-start-3 lg:translate-x-0 transition-all duration-300 ease-out bg-gradient-to-l via-black/10 from-black/60 to-transparent z-40 w-72 lg:w-auto overflow-y-auto `}
+            className={`fixed inset-y-0 right-0 transform ${filterOpen ? 'translate-x-0' : 'translate-x-full'} lg:relative lg:row-start-1 lg:col-start-3 lg:translate-x-0 transition-all duration-300 ease-out bg-gradient-to-l via-black/10 from-black/60 to-transparent z-40 w-screen lg:w-auto overflow-y-auto `}
           >
             <TodoFilter />
           </aside>
 
         {/* Footer - Mobile order: 4 */}
 
-          <footer className="row-start-2 col-span-full bg-white/10 dark:bg-gray-800/10 backdrop-blur-lg mt-auto">
-          <Footer />
-        </footer>
-        
+          <footer className="row-start-2 col-span-full mt-auto ">
+            <Footer />
+          </footer>
       </div>
 
       {/* Render TodoTimeline at the root level */}

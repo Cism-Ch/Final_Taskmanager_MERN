@@ -1,146 +1,219 @@
-# TaskManager MERN
+# 📋 TaskManager MERN
 
-[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-Latest-339933?style=flat-square&logo=node.js)](https://nodejs.org/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-Latest-47A248?style=flat-square&logo=mongodb)](https://www.mongodb.com/)
-[![Express](https://img.shields.io/badge/Express-Latest-000000?style=flat-square&logo=express)](https://expressjs.com/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-Latest-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
+> Application moderne de gestion de tâches construite avec la stack MERN (MongoDB, Express.js, React, Node.js)
 
-Une application web de gestion de tâches complète et moderne, construite avec la stack MERN (MongoDB, Express.js, React, Node.js). Elle offre une interface utilisateur intuitive et réactive pour gérer efficacement vos tâches quotidiennes.
+## ✨ Caractéristiques Principales
 
-## ✨ Fonctionnalités Principales
+- 🔐 Authentification complète avec validation par email
+- 📱 Interface responsive et moderne avec mode sombre/clair
+- 🎯 Gestion avancée des tâches avec catégorisation
+- 📊 Filtrage et tri sophistiqués
+- ⏱️ Timeline interactive des tâches
+- 👤 Profils utilisateurs personnalisables
 
-- **Gestion Complète des Tâches**
-  - Création, modification et suppression de tâches
-  - Catégorisation et filtrage avancé
-  - Système de dates limites
-  - Tri personnalisable
-
-- **Système d'Authentification Robuste**
-  - Inscription et connexion sécurisées
-  - Vérification d'email en deux étapes
-  - Gestion de profil avec avatar
-  - Statistiques utilisateur
-
-- **Interface Moderne**
-  - Design responsive avec Tailwind CSS
-  - Mode sombre/clair
-  - Animations fluides avec Framer Motion
-  - Notifications en temps réel
-
-## 🚀 Technologies Utilisées
+## 🚀 Technologies
 
 ### Frontend
-- **Core**: React 18, Vite
-- **State Management**: Redux Toolkit, Redux Persist
-- **UI/UX**: 
-  - Tailwind CSS
-  - Framer Motion
-  - HeadlessUI
-  - React Hot Toast
-- **Routing**: React Router DOM
-- **Formulaires**: React Hook Form
-- **HTTP**: Axios
+![React](https://img.shields.io/badge/React-18.3.1-blue)
+![Redux](https://img.shields.io/badge/Redux-Toolkit-764ABC)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.x-38B2AC)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-007ACC)
 
 ### Backend
-- **Core**: Node.js, Express.js
-- **Base de données**: MongoDB, Mongoose
-- **Sécurité**: JWT, bcryptjs, Joi
-- **Email**: Nodemailer, Handlebars
-- **Upload**: Multer
-- **Cache**: node-cache
-- **Tests**: Jest
+![Node.js](https://img.shields.io/badge/Node.js-20.x-339933)
+![Express](https://img.shields.io/badge/Express-4.x-000000)
+![MongoDB](https://img.shields.io/badge/MongoDB-6.x-47A248)
+![JWT](https://img.shields.io/badge/JWT-Auth-000000)
 
 ## 📋 Prérequis
 
-- Node.js (version 14 ou supérieure)
-- MongoDB (version 4.4 ou supérieure)
-- pnpm (gestionnaire de paquets)
+- **Node.js 20.x ou supérieur**
+  - Nécessaire pour exécuter le backend et le frontend
+  - La version LTS est recommandée pour une meilleure stabilité
+  
+- **MongoDB 6.x ou supérieur**
+  - Base de données NoSQL pour stocker les données de l'application
+  - Installation locale ou utilisation d'un service cloud (MongoDB Atlas)
+  - Création d'une base de données dédiée pour le projet
+  
+- **pnpm (recommandé) ou npm**
+  - Gestionnaire de paquets pour installer les dépendances
+  - pnpm offre une meilleure performance et gestion de l'espace disque
+  - Installation : `npm install -g pnpm`
+  
+- **Compte email pour les notifications**
+  - Nécessaire pour l'envoi des emails de validation et notifications
+  - Configuration SMTP requise (Gmail, Outlook, ou autre service SMTP)
 
-## 🛠 Installation
+## 🛠️ Installation
 
-1. **Cloner le dépôt**
+### Configuration du Backend
+
+1. Cloner le dépôt :
 ```bash
-git clone https://github.com/votre-username/taskmanager-mern.git
-cd taskmanager-mern
+git clone [url-du-repo]
+cd Final_Taskmanager_MERN
 ```
 
-2. **Installer les dépendances**
+2. Installer les dépendances du backend :
 ```bash
-# Installation des dépendances du backend
 cd Taskmanager_Backend
 pnpm install
-
-# Installation des dépendances du frontend
-cd ../Taskmanager_Frontend
-pnpm install
 ```
 
-3. **Configuration**
-   - Créer un fichier `.env` dans le dossier `Taskmanager_Backend` :
+3. Configurer les variables d'environnement :
+```bash
+cp .env.example .env
+```
+
+Variables d'environnement requises pour le backend :
 ```env
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/taskmanager
 JWT_SECRET=votre_secret_jwt
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=votre_email@gmail.com
-SMTP_PASS=votre_mot_de_passe
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=votre_email@gmail.com
+EMAIL_PASSWORD=votre_mot_de_passe_app
 ```
 
-4. **Lancer l'application**
+4. Démarrer le serveur :
 ```bash
-# Démarrer le backend (depuis Taskmanager_Backend)
-pnpm start
-
-# Démarrer le frontend (depuis Taskmanager_Frontend)
-pnpm dev
+pnpm run start
 ```
 
-## 📁 Structure du Projet
+### Configuration du Frontend
 
-```
-taskmanager-mern/
-├── Taskmanager_Backend/         # Backend Express.js
-│   ├── controllers/            # Contrôleurs de l'API
-│   ├── db/                    # Configuration et modèles MongoDB
-│   ├── middlewares/           # Middlewares (auth, upload, etc.)
-│   ├── routes/                # Routes de l'API
-│   └── utilitaire/           # Utilitaires et helpers
-│
-└── Taskmanager_Frontend/       # Frontend React
-    ├── src/
-    │   ├── components/        # Composants React
-    │   ├── pages/            # Pages de l'application
-    │   ├── redux/            # Configuration Redux
-    │   └── utils/            # Utilitaires
-    └── public/               # Assets publics
-```
-
-## 💻 Commandes Utiles
-
-### Backend
+1. Installer les dépendances :
 ```bash
-pnpm start          # Démarrer le serveur
-pnpm dev            # Démarrer avec nodemon (développement)
-pnpm test           # Lancer les tests
+cd ../Taskmanager_Frontend
+pnpm install
 ```
+
+2. Configurer les variables d'environnement :
+```bash
+cp .env.example .env
+```
+
+Variables d'environnement requises pour le frontend :
+```env
+VITE_API_URL=http://localhost:5000/api
+VITE_APP_NAME=TaskManager
+VITE_APP_VERSION=1.0.0
+```
+
+3. Lancer l'application :
+```bash
+pnpm run dev
+```
+
+## 🏗️ Structure du Projet
 
 ### Frontend
-```bash
-pnpm dev            # Démarrer le serveur de développement
-pnpm build          # Construire pour la production
-pnpm preview        # Prévisualiser la build de production
+```
+src/
+├── components/     # Composants réutilisables
+├── pages/         # Pages de l'application
+├── contexts/      # Contextes React
+├── hooks/         # Custom hooks
+├── redux/         # Store et slices Redux
+├── services/      # Services API
+└── utils/         # Utilitaires
 ```
 
-## 🤝 Contribution
+### Backend
+```
+├── controllers/   # Logique métier
+├── routes/       # Définition des routes
+├── models/       # Modèles Mongoose
+├── middlewares/  # Middlewares Express
+├── services/     # Services métier
+└── utilitaire/   # Fonctions utilitaires
+```
 
-1. Fork le projet
-2. Créez votre branche (`git checkout -b feature/amazing-feature`)
-3. Committez vos changements (`git commit -m 'feat: Ajout d'une fonctionnalité'`)
-4. Push vers la branche (`git push origin feature/amazing-feature`)
-5. Ouvrez une Pull Request
+## 🔥 Fonctionnalités Détaillées
 
-## 📝 License
+### Gestion des Utilisateurs
+- **Inscription avec validation email**
+  - Formulaire d'inscription complet
+  - Envoi d'email de confirmation avec lien de validation
+  - Protection contre les inscriptions multiples
+  
+- **Authentification JWT sécurisée**
+  - Tokens JWT pour la gestion des sessions
+  - Refresh tokens pour une connexion persistante
+  - Déconnexion automatique après expiration
+  
+- **Profils personnalisables avec avatar**
+  - Upload d'images pour l'avatar
+  - Modification des informations personnelles
+  - Prévisualisation des modifications
+  
+- **Statistiques d'activité**
+  - Nombre de tâches créées/complétées
+  - Graphiques d'activité journalière
+  - Historique des modifications
 
-Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+### Gestion des Tâches
+- **CRUD complet des tâches**
+  - Création intuitive avec formulaire détaillé
+  - Modification en temps réel
+  - Suppression avec confirmation
+  - Marquage comme complété/incomplet
+  
+- **Catégorisation personnalisée**
+  - Création de catégories personnalisées
+  - Attribution de couleurs aux catégories
+  - Filtrage par catégorie
+  
+- **Filtrage multi-critères**
+  - Par statut (complété/incomplet)
+  - Par date de création/échéance
+  - Par priorité
+  - Par catégorie
+  
+- **Tri avancé**
+  - Par date (croissant/décroissant)
+  - Par priorité
+  - Par statut
+  - Par ordre alphabétique
+  
+- **Timeline interactive**
+  - Vue chronologique des tâches
+  - Indicateurs visuels de progression
+  - Navigation temporelle intuitive
+
+### Interface Utilisateur
+- Design responsive
+- Mode sombre/clair
+- Composants réutilisables
+- Notifications toast
+- Modales interactives
+
+## 📸 Captures d'écran
+
+### Interface de connexion
+![Interface de connexion](Pictures/capture-login.png)
+
+### Création de tâche
+![Création de tâche](Pictures/Capture-add-task.png)
+
+### Timeline des tâches
+![Timeline des tâches](Pictures/Capture-timeline.png)
+
+### Profil utilisateur
+![Profil utilisateur](Pictures/Capture-user-profil.png)
+
+### Modification de profil
+![Modification de profil](Pictures/Capture-modal-update-profile.png)
+
+## 🔧 Scripts Disponibles
+
+### Backend
+- `pnpm run start` : Démarre le serveur
+- `pnpm run test` : Lance les tests
+
+### Frontend
+- `pnpm run dev` : Lance le serveur de développement
+- `pnpm build` : Crée la version de production
+- `pnpm preview` : Prévisualise la version de production

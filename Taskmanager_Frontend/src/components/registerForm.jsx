@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAuthState, register as createAccount, setStatusToIdle } from '../redux/slices/authSlice';
+import { notifications } from '../services/notifications';
 import Spinner from './spinner';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -14,50 +15,42 @@ function RegisterForm() {
 
     const onHandleSubmit = (data) => {
       dispatch(createAccount(data))
+        .unwrap()
+        .then(() => {
+          notifications.success("Inscription réussie! Un email d'activation a été envoyé.")
+        })
+        .catch((error) => {
+          notifications.error(error?.message || "Échec de l'inscription")
+        });
     };
 
     useEffect(() => {
+      // Vérification des erreurs de validation
+      Object.keys(errors).forEach(key => {
+        notifications.warning(errors[key].message);
+      });
+    }, [errors]);
+    
+    useEffect(() => {
       if (['success', 'failed'].includes(status)) {
+        if (status === 'success') {
+          notifications.success(message || "Inscription réussie!");
+        } else if (status === 'failed') {
+          notifications.error(message || "Échec de l'inscription");
+        }
         setTimeout(() => {
           dispatch(setStatusToIdle())
         }, 6000);
       }
-    }, [dispatch,status]);  
+    }, [dispatch, status, message]);
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       className="w-full max-w-xl mx-auto px-4 sm:px-6"
     >
-      {/* Notifications */}
-      {((status === 'failed') && message) && (
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="bg-red-100 text-red-700 p-4 mb-6 text-sm rounded-lg border border-red-200 shadow-sm flex items-center"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span>{ message }</span>
-        </motion.div>
-      )}
-      
-      {((status === 'success') && message) && (
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="bg-green-100 text-green-700 p-4 mb-6 text-sm rounded-lg border border-green-200 shadow-sm flex items-center"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-          <span>{ message }</span>
-        </motion.div>
-      )}
-      
       {(status === 'loading') && (
         <div className="flex justify-center my-6">
           <Spinner />

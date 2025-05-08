@@ -72,16 +72,30 @@ App
 
 ### Composants Réutilisables
 - **Profile Components** :
-  - `ProfileHeader` : En-tête du profil utilisateur
-  - `ProfileInfo` : Informations détaillées du profil
-  - `ProfileStats` : Statistiques de l'utilisateur
-  - `ProfileUpdateModal` : Modal de mise à jour du profil
+  - `ProfileHeader` : En-tête du profil avec avatar et informations basiques
+  - `ProfileInfo` : Informations détaillées du profil utilisateur
+  - `ProfileStats` : Statistiques des tâches et activités
+  - `ProfileUpdateModal` : Modal de mise à jour des informations
+  - `ActivityFeed` : Historique des activités utilisateur
 
 - **Todo Components** :
   - `TodoCreate` : Création de nouvelles tâches
-  - `TodoList` : Liste des tâches
-  - `TodoFilter` : Filtrage et tri des tâches
+  - `TodoList` : Liste des tâches avec pagination
+  - `TodoFilter` : Système de filtrage avancé
   - `TodoComputed` : Calculs et statistiques des tâches
+  - `TodoTimeline` : Visualisation chronologique des tâches
+  - `TodoEdit` : Édition des tâches existantes
+
+- **Filtering Components** :
+  - `MainFilters` : Filtres principaux (tous, actifs, complétés)
+  - `DateRangeFilter` : Filtrage par plage de dates
+  - `CategorySelect` : Sélection et filtrage par catégorie
+  - `SortingOptions` : Options de tri (date, priorité, etc.)
+
+- **Notification Components** :
+  - `Toast` : Notifications toast pour le feedback utilisateur
+  - `Popup` : Fenêtres modales pour les confirmations
+  - `PopupPortal` : Portail React pour les modales
 
 ### Logique Métier
 Les composants intègrent une logique métier spécifique :
@@ -111,9 +125,19 @@ Les composants intègrent une logique métier spécifique :
 
 ### Gestion des Tâches
 - CRUD complet des tâches
-- Filtrage par catégorie
-- Tri par date/priorité
+- Système de filtrage avancé :
+  - Filtres par statut (tous, actifs, complétés)
+  - Filtrage par catégorie
+  - Filtrage par plage de dates
+  - Recherche textuelle
+- Options de tri multiples :
+  - Par date (création, échéance)
+  - Par priorité
+  - Par statut
+  - Par catégorie
 - Pagination des résultats
+- Visualisation chronologique
+- Notifications en temps réel des mises à jour
 
 ### Upload d'Images
 - Support des avatars utilisateur
@@ -156,7 +180,36 @@ POST   /api/user/avatar //En developpement
 - Refresh token automatique
 - Retry des requêtes échouées
 
-## 5. Performance et Optimisation
+## 5. Système de Notifications et Feedback Utilisateur
+
+### Architecture des Notifications
+- Système de toast basé sur un context React
+- Gestion centralisée via `useToast` hook
+- Support de différents types de notifications :
+  - Succès
+  - Erreur
+  - Information
+  - Avertissement
+
+### Composants de Notification
+- `Toast` : Affichage des notifications
+  - Animation d'entrée/sortie
+  - Auto-destruction après délai
+  - Support du HTML dans les messages
+- `PopupPortal` : Gestion des modales via portails React
+- `Popup` : Fenêtres modales pour les interactions utilisateur
+  - Confirmations
+  - Formulaires
+  - Messages d'avertissement
+
+### Services de Notification
+- `notifications.js` : Service centralisé pour la gestion des notifications
+  - File d'attente des notifications
+  - Prioritisation des messages
+  - Configuration des délais
+  - Gestion des interactions utilisateur
+
+## 6. Performance et Optimisation
 
 ### Lazy Loading
 - Routes chargées dynamiquement
@@ -180,3 +233,5 @@ POST   /api/user/avatar //En developpement
 - `useProfileUpdate` : Gestion de la mise à jour du profil
 - `useTaskFilters` : Logique de filtrage des tâches
 - `useTaskSorting` : Logique de tri des tâches
+- `useToast` : Gestion des notifications toast
+- `useToastContext` : Context provider pour les toasts

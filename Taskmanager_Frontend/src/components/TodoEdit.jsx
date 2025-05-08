@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { putTask } from '../redux/slices/taskSlice';
+import { putTask, deleteTask } from '../redux/slices/taskSlice';
 import {
   selectAvailableCategories,
   DEFAULT_CATEGORIES
 } from '../redux/slices/categorySlice';
-import { toast } from 'react-toastify';
+import { notifications } from '../services/notifications';
 import PropTypes from 'prop-types';
 import {
   HiOutlinePencilSquare,
@@ -82,9 +82,53 @@ const TodoEdit = ({ isOpen, onClose, task }) => {
     });
   };
 
+  const validateForm = () => {
+    if (!formData.title.trim()) {
+      notifications.error('Le titre est requis');
+      return false;
+    }
+    
+    if (formData.title.trim().length < 3) {
+      notifications.error('Le titre doit contenir au moins 3 caractères');
+      return false;
+    }
+
+    if (formData.description.trim().length > 500) {
+      notifications.error('La description ne doit pas dépasser 500 caractères');
+      return false;
+    }
+
+    if (formData.dueDate && new Date(formData.dueDate) < new Date()) {
+      notifications.error('La date d\'échéance ne peut pas être dans le passé');
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleDelete = async () => {
+    try {
+      const confirmation = window.confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?');
+      
+      if (confirmation) {
+        setIsLoading(true);
+        await dispatch(deleteTask(task._id)).unwrap();
+        notifications.success('Tâche supprimée avec succès');
+        setIsDropdownOpen(false);
+        onClose?.();
+      } else {
+        notifications.info('Suppression annulée');
+      }
+    } catch (error) {
+      notifications.error(error.message || 'Erreur lors de la suppression');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.title.trim()) return;
+    if (!validateForm()) return;
 
     const taskData = {
       title: formData.title.trim(),
@@ -98,12 +142,12 @@ const TodoEdit = ({ isOpen, onClose, task }) => {
     try {
       setIsLoading(true);
       await dispatch(putTask({ ...taskData, _id: task._id })).unwrap();
-      toast.success('Tâche modifiée avec succès');
+      notifications.success('Tâche modifiée avec succès');
       resetForm();
       setIsDropdownOpen(false);
       onClose?.();
     } catch (error) {
-      toast.error('Erreur lors de la modification');
+      notifications.error(error.message || 'Erreur lors de la modification');
     } finally {
       setIsLoading(false);
     }
@@ -130,13 +174,13 @@ const TodoEdit = ({ isOpen, onClose, task }) => {
       </button>
 
       {isDropdownOpen && (
-        <div className="absolute top-full left-0 right-0 mt-2 z-50 
+        <div className="absolute top-full left-0 right-0 mt-2 mb-2 z-50 
           transform transition-all duration-300 ease-in-out 
           opacity-100 scale-100 origin-top"
         >
           <form onSubmit={handleSubmit}
-            className="backdrop-filter backdrop-blur-lg bg-white/20 dark:bg-black/60
-              border border-white/20 rounded-xl shadow-lg p-6"
+            className="backdrop-filter backdrop-blur-lg bg-white/20 dark:bg-black/80
+              border border-white/20 rounded-xl shadow-lg py-8 px-2"
           >
             <div className="space-y-4">
               {/* Titre */}
@@ -223,7 +267,7 @@ const TodoEdit = ({ isOpen, onClose, task }) => {
               </div>
 
               {/* Boutons */}
-              <div className="flex gap-4">
+              <div className="flex gap-4 flex-wrap">
                 <button
                   type="submit"
                   disabled={!formData.title.trim() || isLoading}
@@ -263,6 +307,20 @@ const TodoEdit = ({ isOpen, onClose, task }) => {
                 >
                   <HiOutlineXMark className="w-5 h-5" />
                   <span>Annuler</span>
+                </button>
+                {/* Bouton Supprimer */}
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  className="w-full mt-4 px-4 py-2 bg-red-500/80 hover:bg-red-600/80
+                    text-white font-medium rounded-lg shadow-md
+                    transition-all duration-300 ease-in-out
+                    hover:shadow-lg motion-safe:hover:scale-[1.02]
+                    focus:outline-none focus:ring-2 focus:ring-red-500/50
+                    inline-flex items-center justify-center gap-2"
+                >
+                  <HiOutlineXMark className="w-5 h-5" />
+                  <span>Supprimer</span>
                 </button>
               </div>
             </div>
