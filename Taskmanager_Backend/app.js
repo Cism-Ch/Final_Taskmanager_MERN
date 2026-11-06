@@ -26,9 +26,9 @@ var authRouter = require('./routes/auth.route');
 var userRouter = require('./routes/user.route');
 var app = express();
 
-// // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+// // view engine setup (désactivé car l'API renvoie uniquement du JSON)
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'jade');
 
 const corsOptions = {
   origin: process.env.CLIENT_URL,

@@ -9,28 +9,24 @@
     "build": ""
   },
   "dependencies": {
-    "bcryptjs": "^3.0.2",
-    "cookie-parser": "~1.4.4",
-    "cors": "^2.8.5",
-    "crypto": "^1.0.1",
-    "debug": "~2.6.9",
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "debug": "^4.4.3",
     "dotenv": "^16.4.7",
-    "express": "^4.18.2",
-    "fs": "0.0.1-security",
-    "handlebars": "^4.7.8",
-    "http-errors": "~1.6.3",
-    "jade": "~1.11.0",
-    "joi": "^17.13.3",
-    "jsonwebtoken": "^9.0.2",
-    "mailhog": "^4.16.0",
-    "mongoose": "^8.13.1",
-    "morgan": "~1.9.1",
-    "multer": "1.4.5-lts.2",
+    "express": "^4.22.1",
+    "handlebars": "^4.7.10",
+    "http-errors": "^2.0.1",
+    "joi": "^17.13.9",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^8.24.1",
+    "morgan": "^1.12.1",
+    "multer": "^2.5.0",
     "node-cache": "^5.1.2",
-    "node-mailjet": "^6.0.8",
-    "nodemailer": "^6.10.0",
-    "nodemon": "^3.1.9",
-    "taskmanagement": "file:",
-    "validator": "^13.15.0"
+    "node-mailjet": "^6.0.11",
+    "validator": "^13.15.35"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }

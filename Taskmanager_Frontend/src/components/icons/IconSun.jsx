@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 
 const IconSun = ({ fill = '#FFF', ...props }) => {
   return (
@@ -11,6 +11,10 @@ const IconSun = ({ fill = '#FFF', ...props }) => {
       />
     </svg>
   );
+};
+
+IconSun.propTypes = {
+  fill: PropTypes.string,
 };
 
 export default IconSun;
